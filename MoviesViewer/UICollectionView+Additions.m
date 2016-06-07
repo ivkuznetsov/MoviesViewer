@@ -31,7 +31,7 @@
     return registeredCells;
 }
 
-- (NSArray*)reloadAnimated:(BOOL)animated oldData:(NSArray*)oldData data:(NSArray*)data completion:(dispatch_block_t)compleiton {
+- (NSArray *)reloadAnimated:(BOOL)animated oldData:(NSArray *)oldData data:(NSArray *)data completion:(dispatch_block_t)compleiton {
     if (!animated || !oldData.count || !self.window) {
         
         [self reloadData];
@@ -43,17 +43,21 @@
     NSMutableArray *toDelete = [NSMutableArray array];
     NSMutableArray *toReload = [NSMutableArray array];
     
-    NSMutableArray *currentArray = [oldData mutableCopy];
-    for (id object in oldData) {
-        if (![data containsObject:object]) {
-            [toDelete addObject:[NSIndexPath indexPathForItem:[oldData indexOfObject:object] inSection:0]];
+    NSMutableSet *oldDataSet = [NSMutableSet setWithArray:oldData];
+    NSMutableSet *dataSet = [NSMutableSet setWithArray:data];
+    
+    NSMutableOrderedSet *currentArray = [NSMutableOrderedSet orderedSetWithArray:oldData];
+    for (NSUInteger index = 0; index < oldData.count; index++) {
+        id object = oldData[index];
+        if (![dataSet containsObject:object]) {
+            [toDelete addObject:[NSIndexPath indexPathForItem:index inSection:0]];
             [currentArray removeObject:object];
         }
     }
     
     for (NSUInteger index = 0; index < data.count; index++) {
         id object = data[index];
-        if (![oldData containsObject:object]) {
+        if (![oldDataSet containsObject:object]) {
             [toAdd addObject:[NSIndexPath indexPathForItem:index inSection:0]];
             [currentArray insertObject:object atIndex:index];
         } else {

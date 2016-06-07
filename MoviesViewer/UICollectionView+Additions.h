@@ -11,6 +11,6 @@
 @interface UICollectionView (Additions)
 
 - (UICollectionViewCell *)createCellWithCellClass:(Class)cellClass indexPath:(NSIndexPath *)indexPath;
-- (NSArray*)reloadAnimated:(BOOL)animated oldData:(NSArray*)oldData data:(NSArray*)data completion:(dispatch_block_t)compleiton;
+- (NSArray *)reloadAnimated:(BOOL)animated oldData:(NSArray *)oldData data:(NSArray *)data completion:(dispatch_block_t)compleiton;
 
 @end
