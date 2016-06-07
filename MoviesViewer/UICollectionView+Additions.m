@@ -46,12 +46,12 @@
     NSMutableSet *oldDataSet = [NSMutableSet setWithArray:oldData];
     NSMutableSet *dataSet = [NSMutableSet setWithArray:data];
     
-    NSMutableOrderedSet *currentArray = [NSMutableOrderedSet orderedSetWithArray:oldData];
+    NSMutableOrderedSet *currentSet = [NSMutableOrderedSet orderedSetWithArray:oldData];
     for (NSUInteger index = 0; index < oldData.count; index++) {
         id object = oldData[index];
         if (![dataSet containsObject:object]) {
             [toDelete addObject:[NSIndexPath indexPathForItem:index inSection:0]];
-            [currentArray removeObject:object];
+            [currentSet removeObject:object];
         }
     }
     
@@ -59,18 +59,19 @@
         id object = data[index];
         if (![oldDataSet containsObject:object]) {
             [toAdd addObject:[NSIndexPath indexPathForItem:index inSection:0]];
-            [currentArray insertObject:object atIndex:index];
+            [currentSet insertObject:object atIndex:index];
         } else {
             [toReload addObject:[NSIndexPath indexPathForItem:index inSection:0]];
         }
     }
     
     NSMutableArray *itemsToMove = [NSMutableArray array];
-    for (NSUInteger index = 0; index < currentArray.count; index++) {
-        NSUInteger newDataIndex = [data indexOfObject:currentArray[index]];
-        if (index != newDataIndex) {
-            [itemsToMove addObject:@{ @"from" : [NSIndexPath indexPathForItem:index inSection:0],
-                                      @"to" : [NSIndexPath indexPathForItem:newDataIndex inSection:0] }];
+    for (NSUInteger index = 0; index < data.count; index++) {
+        id object = data[index];
+        NSUInteger oldDataIndex = [currentSet indexOfObject:object];
+        if (index != oldDataIndex) {
+            [itemsToMove addObject:@{ @"from" : [NSIndexPath indexPathForItem:[oldData indexOfObject:object] inSection:0],
+                                      @"to" : [NSIndexPath indexPathForItem:index inSection:0] }];
         }
     }
     
