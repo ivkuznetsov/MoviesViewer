@@ -20,6 +20,7 @@
 @implementation MovieCell
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     [Movie addObserver:self selector:@selector(didGetUpdate:)];
 }
 

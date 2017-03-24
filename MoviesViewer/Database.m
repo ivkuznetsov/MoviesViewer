@@ -52,6 +52,7 @@
         [NSException raise:NSGenericException format:@"[Database performSync:] could not be executed on main thread"];
     }
     dispatch_sync([Database sharedDB].serialQueue, block);
+    [[Database sharedDB].backgroundContexts removeObjectForKey:[NSThread currentThread].name];
 }
 
 + (void) saveWithCompletion: (dispatch_block_t) completion {

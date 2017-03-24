@@ -11,6 +11,7 @@
 @implementation SeparatorLineView
 
 - (void)awakeFromNib {
+    [super awakeFromNib];
     UIView *view = [UIView new];
     view.backgroundColor = self.backgroundColor;
     self.backgroundColor = [UIColor clearColor];
