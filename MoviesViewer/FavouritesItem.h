@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ObjectsContainer.h"
 
 @interface FavouritesItem : UIBarButtonItem
 
-- (instancetype)initWithMovie:(Movie *)movie;
+- (instancetype)initWithMovie:(Movie *)movie container:(ObjectsContainer *)container;
 
 @end

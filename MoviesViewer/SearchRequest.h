@@ -11,7 +11,8 @@
 @interface SearchRequest : ServiceRequest
 
 @property (nonatomic) NSString *query;
-@property (nonatomic) NSUInteger page;
+@property (nonatomic) NSNumber *page;
+@property (nonatomic) NSNumber *updatedPage;
 
 //response
 @property (nonatomic) NSArray<NSManagedObjectID *> *results;

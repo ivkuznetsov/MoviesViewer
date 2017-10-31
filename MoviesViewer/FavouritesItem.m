@@ -7,20 +7,27 @@
 //
 
 #import "FavouritesItem.h"
-#import "FavouritesManager.h"
 
 @interface FavouritesItem()
 
 @property (nonatomic) Movie *movie;
+@property (nonatomic) ObjectsContainer *container;
 
 @end
 
 @implementation FavouritesItem
 
-- (instancetype)initWithMovie:(Movie *)movie {
+- (instancetype)initWithMovie:(Movie *)movie container:(ObjectsContainer *)container {
     if (self = [super initWithImage:nil style:UIBarButtonItemStylePlain target:self action:@selector(favouriteAction)]) {
-        [[FavouritesManager sharedManager] addUpdatesObserver:self selector:@selector(reloadState)];
+        _container = container;
         self.movie = movie;
+        
+        __weak typeof(self) wSelf = self;
+        [ObjectsContainer addUpdatesObserver:self block:^(AMNotification *not) {
+            if (not.object == wSelf.container) {
+                [wSelf reloadState];
+            }
+        }];
     }
     return self;
 }
@@ -31,19 +38,15 @@
 }
 
 - (void)reloadState {
-    self.image = [UIImage imageNamed:[[FavouritesManager sharedManager] isMovieFavourite:_movie] ? @"favouriteOn" : @"favouriteOff"];
+    self.image = [UIImage imageNamed:[_container isFavourite:_movie] ? @"favouriteOn" : @"favouriteOff"];
 }
 
 - (void)favouriteAction {
-    if ([[FavouritesManager sharedManager] isMovieFavourite:_movie]) {
-        [[FavouritesManager sharedManager] removeMovie:_movie];
+    if ([_container isFavourite:_movie]) {
+        [_container remove:_movie];
     } else {
-        [[FavouritesManager sharedManager] addMovie:_movie];
+        [_container add:_movie];
     }
-}
-
-- (void)dealloc {
-    [[FavouritesManager sharedManager] removeUpdatesObserver:self];
 }
 
 @end

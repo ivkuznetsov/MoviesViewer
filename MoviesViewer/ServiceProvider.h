@@ -11,13 +11,13 @@
 
 #define kReachabilityChangeNotification @"kReachabilityChangeNotification"
 
-typedef void(^CompletionBlock)(id request, NSError *error);
-
 @interface ServiceProvider : AFHTTPClient
 
+@property (nonatomic) NSString *apiKey;
 @property (nonatomic) BOOL enableLogging;
 
-+ (instancetype)sharedProvider;
-- (AFHTTPRequestOperation *)sendRequest:(ServiceRequest *)serviceRequest withCompletionBlock:(CompletionBlock)callback;
+- (AFHTTPRequestOperation *)send:(ServiceRequest *)serviceRequest completion:(CompletionBlock)completion;
+
+- (void)loadConfiguration:(void(^)(NSDictionary *configuration, NSError *error))completion;
 
 @end

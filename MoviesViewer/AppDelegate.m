@@ -14,30 +14,41 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
-    if (![Movie allObjects].count) {
-        for (NSString *movieId in [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"PredefinedData" withExtension:@"plist"]]) {
-            Movie *movie = [Movie create];
-            movie.uid = movieId;
-        }
-        [Database save];
-    }
-    
     _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    _window.backgroundColor = [UIColor whiteColor];
     [self setupAppearance];
-    UITabBarController *tc = [UITabBarController new];
-    tc.viewControllers = @[ [[BaseNavigationController alloc] initWithRootViewController:[ExploreViewController new]
-                                                                              tabbarItem:UITabBarSystemItemSearch],
-                            [[BaseNavigationController alloc] initWithRootViewController:[FavouritesViewController new]
-                                                                              tabbarItem:UITabBarSystemItemFavorites] ];
-    _window.rootViewController = tc;
-    [_window makeKeyAndVisible];
+    
+    [self createDefaultData:^{
+        UITabBarController *tc = [UITabBarController new];
+        tc.viewControllers = @[ [[BaseNavigationController alloc] initWithRootViewController:[ExploreViewController new]
+                                                                                  tabbarItem:UITabBarSystemItemSearch],
+                                [[BaseNavigationController alloc] initWithRootViewController:[[FavouritesViewController alloc] initWithContainer:AppContainer.shared.favorites]
+                                                                                  tabbarItem:UITabBarSystemItemFavorites] ];
+        _window.rootViewController = tc;
+        [_window makeKeyAndVisible];
+    }];
+    
     return YES;
 }
 
 - (void)setupAppearance {
     [[UINavigationBar appearanceWhenContainedIn:[BaseNavigationController class], nil] setTintColor:[UIColor blackColor]];
     [[UITabBar appearance] setTintColor:[UIColor blackColor]];
+}
+
+- (void)createDefaultData:(dispatch_block_t)completion {
+    if (![Movie allObjects:AppContainer.shared.database.viewContext].count) {
+        [AppContainer.shared.database perform:^(NSManagedObjectContext *ctx) {
+            for (NSString *movieId in [NSArray arrayWithContentsOfURL:[[NSBundle mainBundle] URLForResource:@"PredefinedData" withExtension:@"plist"]]) {
+                Movie *movie = [Movie createIn:ctx];
+                movie.uid = movieId;
+            }
+            [AMDatabase save:ctx];
+            dispatch_async(dispatch_get_main_queue(), completion);
+        }];
+    } else {
+        completion();
+    }
 }
 
 @end

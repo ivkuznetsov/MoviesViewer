@@ -6,7 +6,5 @@
 //  Copyright © 2016 Ilya Kuznetsov. All rights reserved.
 //
 
-#import "Movie.h"
-#import "MovieCategory.h"
+#import "Movie+Additions.h"
 #import "NSManagedObject+Notifications.h"
-#import "NSManagedObject+Database.h"

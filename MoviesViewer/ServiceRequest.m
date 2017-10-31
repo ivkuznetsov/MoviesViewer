@@ -8,6 +8,7 @@
 
 #import "ServiceRequest.h"
 #import "NSDictionary+Validation.h"
+#import "AppContainer.h"
 
 @implementation ServiceRequest
 
@@ -24,7 +25,7 @@
 }
 
 - (NSDictionary *)requestDictionary {
-	return [NSDictionary dictionary];
+    return @{};
 }
 
 - (void)processResponse:(NSDictionary *)response {
@@ -44,6 +45,10 @@
         }
 	}
 	return nil;
+}
+
+- (AFHTTPRequestOperation *)send:(CompletionBlock)completion {
+    return [AppContainer.shared.service send:self completion:completion];
 }
 
 @end

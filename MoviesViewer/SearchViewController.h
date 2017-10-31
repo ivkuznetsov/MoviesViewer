@@ -6,9 +6,9 @@
 //  Copyright © 2016 Ilya Kuznetsov. All rights reserved.
 //
 
-#import "CollectionViewController.h"
+#import <AMAppkit/AMAppkit.h>
 
-@interface SearchViewController : CollectionViewController
+@interface SearchViewController : AMBaseViewController
 
 @property (nonatomic, readonly) UISearchController *searchController;
 

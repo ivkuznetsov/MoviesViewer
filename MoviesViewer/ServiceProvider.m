@@ -8,17 +8,15 @@
 
 #import "ServiceProvider.h"
 #import "NSDictionary+Validation.h"
+#import "ConfigurationRequest.h"
+
+@interface ServiceProvider()
+
+@property (nonatomic) NSDictionary *configuration;
+
+@end
 
 @implementation ServiceProvider
-
-+ (instancetype)sharedProvider {
-    static dispatch_once_t once;
-    static ServiceProvider *sharedInstance;
-    dispatch_once(&once, ^{
-        sharedInstance = [[self alloc] initWithBaseURL:[NSURL URLWithString:kBaseURL]];
-    });
-    return sharedInstance;
-}
 
 - (instancetype)initWithBaseURL:(NSURL *)url {
     if (self = [super initWithBaseURL:url]) {
@@ -33,8 +31,11 @@
     return self;
 }
 
-- (AFHTTPRequestOperation *)sendRequest:(ServiceRequest *)serviceRequest withCompletionBlock:(CompletionBlock)completion {
-    NSMutableURLRequest *request = [self requestWithMethod:[serviceRequest method] path:serviceRequest.path parameters:[serviceRequest requestDictionary]];
+- (AFHTTPRequestOperation *)send:(ServiceRequest *)serviceRequest completion:(CompletionBlock)completion {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:[serviceRequest requestDictionary]];
+    dict[@"api_key"] = self.apiKey;
+    
+    NSMutableURLRequest *request = [self requestWithMethod:[serviceRequest method] path:serviceRequest.path parameters:dict];
     
     AFHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request serviceRequest:serviceRequest completion:completion];
     [self enqueueHTTPRequestOperation:operation];
@@ -101,7 +102,7 @@
 
 - (void)logOperation:(AFHTTPRequestOperation *)operation error:(NSError *)error {
     if (operation.cancelled) {
-        [self log:[NSString stringWithFormat:@"Request canceled: %@", operation.request]];
+        [self log:[NSString stringWithFormat:@"Request canceled: %@", operation.request.description]];
     }
     [self log:@"Response code: %d", operation.response.statusCode];
     [self log:@"Response headers: %@", operation.response.allHeaderFields];
@@ -110,7 +111,7 @@
         [self log:@"Response body: %@", [[NSString alloc] initWithData:operation.responseData encoding:self.stringEncoding]];
     }
     if (error) {
-        [self log:@"request error: %@", error];
+        [self log:@"request error: %@", error.localizedDescription];
     }
 }
 
@@ -121,6 +122,37 @@
         NSLogv(logFormat, argumentList);
         va_end(argumentList);
     }
+}
+
+- (void)loadConfiguration:(void(^)(NSDictionary *configuration, NSError *error))completion {
+    if (_configuration) {
+        if (completion) {
+            completion(_configuration, nil);
+        }
+        return;
+    }
+    
+    //combine several load configuration requests in single fetch
+    [AMUtils run:^NSOperation *(SuccessCallback success, FailCallback fail) {
+        
+        return [self send:[ConfigurationRequest new] completion:^(ConfigurationRequest *request, NSError *error) {
+            if (error) {
+                fail(nil, error);
+            } else {
+                success(request.configuration);
+            }
+        }];
+        
+    } success:^(NSDictionary *configuration) {
+        _configuration = configuration;
+        if (completion) {
+            completion(configuration, nil);
+        }
+    } failure:^(id object, NSError *requestError) {
+        if (completion) {
+            completion(nil, requestError);
+        }
+    } key:@"configuration"];
 }
 
 @end

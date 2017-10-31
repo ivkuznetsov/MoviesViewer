@@ -8,8 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "NSError+ServiceProvider.h"
+#import "AFNetworking.h"
+
+typedef void(^CompletionBlock)(id request, NSError *error);
 
 @interface ServiceRequest : NSObject
+
+- (AFHTTPRequestOperation *)send:(CompletionBlock)completion;
 
 //to override
 - (NSString *)acceptableContentType;

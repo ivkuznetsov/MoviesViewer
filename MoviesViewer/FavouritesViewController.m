@@ -7,21 +7,30 @@
 //
 
 #import "FavouritesViewController.h"
-#import "FavouritesManager.h"
 #import "MovieCell.h"
 #import "MovieDetailsViewController.h"
-#import "CategoryCell.h"
 
-@interface FavouritesViewController ()
+@interface FavouritesViewController ()<AMCollectionHelperDelegate>
+
+@property (nonatomic) ObjectsContainer *container;
+@property (nonatomic) AMCollectionHelper *collectionHelper;
 
 @end
 
 @implementation FavouritesViewController
 
-- (instancetype)init {
+- (instancetype)initWithContainer:(ObjectsContainer *)container {
     if (self = [super init]) {
         self.title = @"Favourites";
-        [[FavouritesManager sharedManager] addUpdatesObserver:self selector:@selector(didUpdateFavourites)];
+        _container = container;
+        
+        __weak typeof(self) wSelf = self;
+        [ObjectsContainer addUpdatesObserver:self block:^(AMNotification *not) {
+            if (not.object == wSelf.container) {
+                [wSelf reloadBadge];
+                [wSelf reloadViewAnimated:NO];
+            }
+        }];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self reloadBadge];
         });
@@ -30,86 +39,44 @@
 }
 
 - (void)reloadBadge {
-    NSUInteger count = [FavouritesManager sharedManager].favouritesCount;
+    NSUInteger count = _container.objectsCount;
     self.navigationController.tabBarItem.badgeValue = count ? [NSString stringWithFormat:@"%d", (int)count] : nil;
-}
-
-- (void)didUpdateFavourites {
-    [self reloadBadge];
-    [self reloadViewAnimated:NO];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _collectionHelper = [[AMCollectionHelper alloc] initWithView:self.view delegate:self];
+    _collectionHelper.noObjectsView.titleLabel.text = @"No Favorites";
+    
+    CGFloat space = 15;
+    _collectionHelper.layout.minimumInteritemSpacing = space;
+    _collectionHelper.layout.sectionInset = UIEdgeInsetsMake(space, space, space, space);
+    
     [self reloadViewAnimated:NO];
 }
 
 - (void)reloadViewAnimated:(BOOL)animated {
-    NSSet *set = [FavouritesManager sharedManager].favouriteObjects;
-    
-    NSMutableSet *hasNoCategory = [NSMutableSet set];
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    NSMutableArray *categories = [NSMutableArray array];
-    for (Movie *movie in set) {
-        if (!movie.category.uid) {
-            [hasNoCategory addObject:movie];
-            continue;
-        }
-        
-        NSMutableSet *objectsSet = dictionary[movie.category.uid];
-        if (!objectsSet) {
-            objectsSet = [NSMutableSet set];
-            dictionary[movie.category.uid] = objectsSet;
-            [categories addObject:movie.category];
-        }
-        [objectsSet addObject:movie];
-    }
-    
-    NSArray *sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"title" ascending:YES]];
-    
-    NSMutableArray *objects = [NSMutableArray array];
-    for (MovieCategory *category in [categories sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES]]]) {
-        [objects addObject:category];
-        [objects addObjectsFromArray:[dictionary[category.uid] sortedArrayUsingDescriptors:sortDescriptors]];
-    }
-    [objects addObjectsFromArray:[hasNoCategory sortedArrayUsingDescriptors:sortDescriptors]];
-    
-    [self setObjects:objects animated:animated];
+    [self.collectionHelper setObjects:[_container allObjectsIn:AppContainer.shared.database.viewContext] animated:animated];
 }
 
-- (Class)cellClassForObjects:(id)object {
-    if ([object isKindOfClass:[Movie class]]) {
-        return [MovieCell class];
-    } else if ([object isKindOfClass:[MovieCategory class]]) {
-        return [CategoryCell class];
-    }
-    return nil;
+#pragma mark AMCollectionHelperDelegate
+
+- (Class)cellClassFor:(id)object {
+    return [MovieCell class];
 }
 
-- (void)fillCell:(UICollectionViewCell *)cell withObject:(id)object {
-    if ([object isKindOfClass:[Movie class]]) {
-        ((MovieCell *)cell).movie = object;
-    } else if ([object isKindOfClass:[MovieCategory class]]) {
-        ((CategoryCell *)cell).titleLabel.text = [object title];
-    }
+- (void)fillCell:(MovieCell *)cell object:(id)object {
+    cell.movie = object;
 }
 
-- (void)actionForObject:(id)object {
-    if ([object isKindOfClass:[Movie class]]) {
-        [self.navigationController pushViewController:[[MovieDetailsViewController alloc] initWithMovie:object] animated:YES];
-    }
+- (BOOL)actionFor:(id)object {
+    [self.navigationController pushViewController:[[MovieDetailsViewController alloc] initWithMovie:object] animated:YES];
+    return YES;
 }
 
-- (CGSize)cellSizeForObject:(id)object {
-    if ([object isKindOfClass:[Movie class]]) {
-        return [MovieCell sizeForContentWidth:self.collectionView.width - 20];
-    } else {
-        return CGSizeMake(self.collectionView.width - 20, 40);
-    }
-}
-
-- (void)dealloc {
-    [[FavouritesManager sharedManager] removeUpdatesObserver:self];
+- (CGSize)cellSizeFor:(id)object {
+    return [MovieCell sizeForContentWidth:self.collectionHelper.collectionView.width space:15];
 }
 
 @end

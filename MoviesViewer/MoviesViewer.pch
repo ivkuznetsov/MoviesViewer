@@ -9,16 +9,8 @@
 #ifndef MoviesViewer_pch
 #define MoviesViewer_pch
 
-#import "Globals.h"
-#import "Database.h"
-#import "ServiceProvider.h"
-#import "AlertView.h"
-#import "BaseNavigationController.h"
-#import "UIView+Frame.h"
-#import "NSObject+ClassName.h"
+#import <AMAppkit/AMAppkit.h>
 #import "DAL.h"
-#import "ServiceProvider.h"
-#import "NSDictionary+Validation.h"
-#import "UIView+Transitions.h"
+#import "AppContainer.h"
 
 #endif

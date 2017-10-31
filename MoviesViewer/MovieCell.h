@@ -12,6 +12,6 @@
 
 @property (nonatomic) Movie *movie;
 
-+ (CGSize)sizeForContentWidth:(CGFloat)width;
++ (CGSize)sizeForContentWidth:(CGFloat)width space:(CGFloat)space;
 
 @end

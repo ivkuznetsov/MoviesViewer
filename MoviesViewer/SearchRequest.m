@@ -7,27 +7,37 @@
 //
 
 #import "SearchRequest.h"
+#import "NSDictionary+Validation.h"
 
 @implementation SearchRequest
 
 - (NSString *)path {
-    return @"";
+    return @"search/movie";
 }
 
 - (NSDictionary *)requestDictionary {
-    return @{ @"s" : _query, @"page" : @(_page) };
+    return @{ @"query" : _query, @"page" : _page ?: @(1) };
 }
 
 - (void)processResponse:(NSDictionary *)response {
-    NSArray *results = [response validObjectForKey:@"Search"];
+    NSArray *results = [response validObjectForKey:@"results"];
     if (results.count) {
-        [Database performSync:^{
-            NSArray *resultObjects = [Movie updateWithArray:results];
-            [Database save];
-            _results = [NSManagedObject objectIdsWithObjects:resultObjects];
-            [NSManagedObject postUpdateForClasses:@[[Movie class], [MovieCategory class]] object:nil];
+        [AppContainer.shared.database perform:^(NSManagedObjectContext *ctx) {
+            NSArray *resultObjects = [Movie updateWithArray:results context:ctx];
+            [AMDatabase save:ctx];
+            _results = [NSManagedObject idsWithObjects:resultObjects];
+            
+            NSMutableSet *updatedSet = [NSMutableSet set];
+            for (Movie *movie in resultObjects) {
+                [updatedSet addObject:movie.permanentObjectID.URIRepresentation];
+            }
+            [NSManagedObject postUpdateForClasses:@[[Movie class]] notification:[AMNotification makeWithUpdated:updatedSet]];
         }];
     }
+    
+    NSNumber *nextPage = response[@"page"];
+    NSNumber *totalPages = response[@"total_pages"];
+    _updatedPage = totalPages.integerValue != nextPage.integerValue ? @(nextPage.integerValue + 1) : nil;
 }
 
 @end

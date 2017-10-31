@@ -7,7 +7,6 @@
 //
 
 #import "MovieDetailsViewController.h"
-#import "UIImageView+WebCache.h"
 #import "NSMutableArray+Validation.h"
 #import "FavouritesItem.h"
 
@@ -27,10 +26,23 @@
 - (instancetype)initWithMovie:(Movie *)movie {
     if (self = [super init]) {
         _movie = movie;
-        [Movie addObserver:self selector:@selector(didGetUpdate:)];
+        
+        __weak typeof(self) wSelf = self;
+        [NSManagedObject addObserver:self block:^(AMNotification *not) {
+            if ([not.updated containsObject:wSelf.movie.permanentObjectID.URIRepresentation]) {
+                [wSelf reloadView];
+            }
+        } classes:@[[Movie class]]];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didChangeReachabilityStatus) name:kReachabilityChangeNotification object:nil];
     }
     return self;
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.operationHelper = [[AMOperationHelper alloc] initWithView:self.view];
+    [self updateMovie];
+    self.navigationItem.rightBarButtonItem = [[FavouritesItem alloc] initWithMovie:_movie container:AppContainer.shared.favorites];
 }
 
 - (void)didChangeReachabilityStatus {
@@ -40,24 +52,12 @@
 }
 
 - (void)updateMovie {
-    [self runBlock:^(CompletionBlock completion, HandleOperation handleOperation) {
+    [self.operationHelper runBlock:^(AMCompletion completion, AMHandleOperation operation, AMProgress progress) {
         
-        handleOperation([_movie updateDetailsWithCompletion:completion]);
+        operation([_movie updateDetails:completion]);
         
-    } completion:nil loading:[_movie isLoaded] ? LoadingTypeNone : LoadingTypeFull errorType:[_movie isLoaded] ? ErrorTypeNone : ErrorTypeFull];
+    } completion:nil loading:[_movie isLoaded] ? AMLoadingTypeNone : AMLoadingTypeFullscreen key:@"update"];
     [self reloadView];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    [self updateMovie];
-    self.navigationItem.rightBarButtonItem = [[FavouritesItem alloc] initWithMovie:_movie];
-}
-
-- (void)didGetUpdate:(NSNotification *)notification {
-    if (notification.object == _movie.permanentObjectID) {
-        [self reloadView];
-    }
 }
 
 - (void)reloadView {
@@ -66,9 +66,11 @@
     NSMutableArray *sublineComponents = [NSMutableArray array];
     [sublineComponents addValidObject:_movie.rated];
     [sublineComponents addValidObject:_movie.runtime];
-    [sublineComponents addValidObject:_movie.genre];
+    
+    if (_movie.genres.count) {
+        [sublineComponents addValidObject:[_movie.genres componentsJoinedByString:@", "]];
+    }
     [sublineComponents addValidObject:_movie.released];
-    [sublineComponents addValidObject:_movie.country];
     
     NSDictionary *attributes = @{ NSForegroundColorAttributeName : [UIColor colorWithWhite:0.3 alpha:1.0] };
     NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:@""];
@@ -79,19 +81,22 @@
         }
     }
     _subtiteLabel.attributedText = attrString;
-    _descriptionLabel.text = _movie.plot;
+    _descriptionLabel.text = _movie.overview;
     
     attrString = [[NSMutableAttributedString alloc] initWithString:@""];
-    CGFloat flontHeight = self.view.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassRegular ? 18 : 15;
-    [self attachValue:_movie.director label:@"Director: " toAttrString:attrString newLine:NO fontHeight:flontHeight];
-    [self attachValue:_movie.writer label:@"Writers: " toAttrString:attrString newLine:YES fontHeight:flontHeight];
-    [self attachValue:_movie.actors label:@"Stars: " toAttrString:attrString newLine:YES fontHeight:flontHeight];
+    CGFloat flontHeight = 16;
+    [self attachValue:[_movie.countries componentsJoinedByString:@", "] label:@"Countries: " toAttrString:attrString newLine:NO fontHeight:flontHeight];
+    [self attachValue:[_movie.companies componentsJoinedByString:@", "] label:@"Companies: " toAttrString:attrString newLine:YES fontHeight:flontHeight];
     _propertiesLabel.attributedText = attrString;
     
     __weak typeof(self) weakSelf = self;
-    [_posterImageView setImageWithURL:[NSURL URLWithString:_movie.poster] placeholderImage:[UIImage imageNamed:@"placeholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-        if (image && cacheType == SDImageCacheTypeNone) {
-            [weakSelf.posterImageView addFadeTransition];
+    [_movie fullPosterPath:^(NSString *parh, NSError *error) {
+        if (!error && weakSelf) {
+            [weakSelf.posterImageView sd_setImageWithURL:[NSURL URLWithString:parh] placeholderImage:[UIImage imageNamed:@"placeholder"] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (image && cacheType == SDImageCacheTypeNone) {
+                    [weakSelf.posterImageView addFadeTransition];
+                }
+            }];
         }
     }];
 }
@@ -105,12 +110,11 @@
     if (!value.length) {
         return;
     }
-    [string appendAttributedString:[[NSAttributedString alloc] initWithString:newLine ? [@"\n" stringByAppendingString:label] : label attributes:@{ NSForegroundColorAttributeName : [UIColor colorWithWhite:0.1 alpha:1.0], NSFontAttributeName : [UIFont boldSystemFontOfSize:fontHeight] }]];
+    [string appendAttributedString:[[NSAttributedString alloc] initWithString:(newLine && string.length) ? [@"\n\n" stringByAppendingString:label] : label attributes:@{ NSForegroundColorAttributeName : [UIColor colorWithWhite:0.1 alpha:1.0], NSFontAttributeName : [UIFont boldSystemFontOfSize:fontHeight] }]];
     [string appendAttributedString:[[NSAttributedString alloc] initWithString:value attributes:@{ NSForegroundColorAttributeName : [UIColor colorWithWhite:0.3 alpha:1.0], NSFontAttributeName : [UIFont systemFontOfSize:fontHeight] }]];
 }
 
 - (void)dealloc {
-    [Movie removeObserver:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:kReachabilityChangeNotification object:nil];
 }
 

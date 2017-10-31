@@ -11,20 +11,18 @@
 @implementation DetailsRequest
 
 - (NSString *)path {
-    return @"";
-}
-
-- (NSDictionary *)requestDictionary {
-    return @{ @"i" : _uid };
+    return [NSString stringWithFormat:@"movie/%@", _uid];
 }
 
 - (void)processResponse:(NSDictionary *)response {
-    [Database performSync:^{
-        Movie *movie = [Movie findFirstByCriteria:@"uid == %@", _uid];
-        [Movie updateWithArray:@[response]];
+    [AppContainer.shared.database perform:^(NSManagedObjectContext *ctx) {
+        
+        Movie *movie = [Movie findFirstIn:ctx criteria:@"uid == %@", _uid];
+        [Movie updateWithArray:@[response] context:ctx];
         movie.loaded = @YES;
-        [Database save];
-        [Movie postUpdateWithObject:movie.permanentObjectID];
+        [AMDatabase save:ctx];
+        
+        [NSManagedObject postUpdateForClasses:@[[Movie class]] notification:[AMNotification makeWithUpdated:[NSSet setWithObject:movie.permanentObjectID.URIRepresentation]]];
     }];
 }
 

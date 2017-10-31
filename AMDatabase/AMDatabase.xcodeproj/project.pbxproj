@@ -1,0 +1,301 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5909AC661E70761300E37903 /* AMDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 596F08CC1E5CC8B300D8FC22 /* AMDatabase.h */; };
+		5909AC671E70761300E37903 /* NSManagedObject+AMDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 596F08CE1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.h */; };
+		594663371ECDE22D00A6F044 /* AMStoreDescription.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = A6A375181EBC674100A28D4C /* AMStoreDescription.h */; };
+		596F08D01E5CC8B300D8FC22 /* AMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 596F08CD1E5CC8B300D8FC22 /* AMDatabase.m */; };
+		596F08D11E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 596F08CF1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.m */; };
+		A6A3751A1EBC674100A28D4C /* AMStoreDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = A6A375191EBC674100A28D4C /* AMStoreDescription.m */; };
+		D7E9DAAD1FA668310046A908 /* NSManagedObjectContext+AMDatabase.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = D7EE69F01FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.h */; };
+		D7EE69F21FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EE69F11FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		596F08BE1E5CC86E00D8FC22 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 12;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				594663371ECDE22D00A6F044 /* AMStoreDescription.h in CopyFiles */,
+				5909AC661E70761300E37903 /* AMDatabase.h in CopyFiles */,
+				D7E9DAAD1FA668310046A908 /* NSManagedObjectContext+AMDatabase.h in CopyFiles */,
+				5909AC671E70761300E37903 /* NSManagedObject+AMDatabase.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		596F08C01E5CC86E00D8FC22 /* libAMDatabase.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libAMDatabase.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		596F08CC1E5CC8B300D8FC22 /* AMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMDatabase.h; sourceTree = "<group>"; };
+		596F08CD1E5CC8B300D8FC22 /* AMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMDatabase.m; sourceTree = "<group>"; };
+		596F08CE1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+AMDatabase.h"; sourceTree = "<group>"; };
+		596F08CF1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+AMDatabase.m"; sourceTree = "<group>"; };
+		A6A375181EBC674100A28D4C /* AMStoreDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AMStoreDescription.h; sourceTree = "<group>"; };
+		A6A375191EBC674100A28D4C /* AMStoreDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AMStoreDescription.m; sourceTree = "<group>"; };
+		D7EE69F01FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObjectContext+AMDatabase.h"; sourceTree = "<group>"; };
+		D7EE69F11FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObjectContext+AMDatabase.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		596F08BD1E5CC86E00D8FC22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		596F08B71E5CC86E00D8FC22 = {
+			isa = PBXGroup;
+			children = (
+				596F08C21E5CC86E00D8FC22 /* AMDatabase */,
+				596F08C11E5CC86E00D8FC22 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		596F08C11E5CC86E00D8FC22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				596F08C01E5CC86E00D8FC22 /* libAMDatabase.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		596F08C21E5CC86E00D8FC22 /* AMDatabase */ = {
+			isa = PBXGroup;
+			children = (
+				A6A375181EBC674100A28D4C /* AMStoreDescription.h */,
+				A6A375191EBC674100A28D4C /* AMStoreDescription.m */,
+				596F08CC1E5CC8B300D8FC22 /* AMDatabase.h */,
+				596F08CD1E5CC8B300D8FC22 /* AMDatabase.m */,
+				596F08CE1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.h */,
+				596F08CF1E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.m */,
+				D7EE69F01FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.h */,
+				D7EE69F11FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.m */,
+			);
+			path = AMDatabase;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		596F08BF1E5CC86E00D8FC22 /* AMDatabase */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 596F08C91E5CC86E00D8FC22 /* Build configuration list for PBXNativeTarget "AMDatabase" */;
+			buildPhases = (
+				596F08BC1E5CC86E00D8FC22 /* Sources */,
+				596F08BD1E5CC86E00D8FC22 /* Frameworks */,
+				596F08BE1E5CC86E00D8FC22 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AMDatabase;
+			productName = AMDatabase;
+			productReference = 596F08C01E5CC86E00D8FC22 /* libAMDatabase.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		596F08B81E5CC86E00D8FC22 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0900;
+				ORGANIZATIONNAME = "Arello Mobile";
+				TargetAttributes = {
+					596F08BF1E5CC86E00D8FC22 = {
+						CreatedOnToolsVersion = 8.2.1;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 596F08BB1E5CC86E00D8FC22 /* Build configuration list for PBXProject "AMDatabase" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 596F08B71E5CC86E00D8FC22;
+			productRefGroup = 596F08C11E5CC86E00D8FC22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				596F08BF1E5CC86E00D8FC22 /* AMDatabase */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		596F08BC1E5CC86E00D8FC22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A6A3751A1EBC674100A28D4C /* AMStoreDescription.m in Sources */,
+				596F08D11E5CC8B300D8FC22 /* NSManagedObject+AMDatabase.m in Sources */,
+				D7EE69F21FA65CC9000B843C /* NSManagedObjectContext+AMDatabase.m in Sources */,
+				596F08D01E5CC8B300D8FC22 /* AMDatabase.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		596F08C71E5CC86E00D8FC22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		596F08C81E5CC86E00D8FC22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		596F08CA1E5CC86E00D8FC22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		596F08CB1E5CC86E00D8FC22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		596F08BB1E5CC86E00D8FC22 /* Build configuration list for PBXProject "AMDatabase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				596F08C71E5CC86E00D8FC22 /* Debug */,
+				596F08C81E5CC86E00D8FC22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		596F08C91E5CC86E00D8FC22 /* Build configuration list for PBXNativeTarget "AMDatabase" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				596F08CA1E5CC86E00D8FC22 /* Debug */,
+				596F08CB1E5CC86E00D8FC22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 596F08B81E5CC86E00D8FC22 /* Project object */;
+}

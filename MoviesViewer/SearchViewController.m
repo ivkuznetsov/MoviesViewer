@@ -11,14 +11,12 @@
 #import "SearchRequest.h"
 #import "MovieDetailsViewController.h"
 
-@interface SearchViewController ()<UISearchResultsUpdating>
+@interface SearchViewController ()<UISearchResultsUpdating, AMCollectionHelperDelegate, AMPagingLoaderDelegate>
 
-@property (nonatomic) BOOL endReached;
-@property (nonatomic) BOOL performedLoading;
-@property (nonatomic) NSString *lastSearchTerm;
-@property (nonatomic) NSUInteger currentPage;
+@property (nonatomic) AMPagingCollectionHelper *collectionHelper;
 @property (nonatomic) UISearchController *searchController;
 @property (nonatomic, weak) UIViewController *rootViewController;
+@property (nonatomic) NSString *lastSearchTerm;
 
 @end
 
@@ -27,6 +25,7 @@
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
     if (self = [super init]) {
         _rootViewController = rootViewController;
+        
         _searchController = [[UISearchController alloc] initWithSearchResultsController:self];
         _searchController.searchResultsUpdater = self;
         _searchController.hidesNavigationBarDuringPresentation = NO;
@@ -35,120 +34,84 @@
     return self;
 }
 
-- (Class)cellClassForObjects:(id)object {
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.operationHelper = [[AMOperationHelper alloc] initWithView:self.view];
+    _collectionHelper = [[AMPagingCollectionHelper alloc] initWithView:self.view delegate:self];
+    _collectionHelper.noObjectsView.titleLabel.text = @"No Results";
+    
+    CGFloat space = 15;
+    _collectionHelper.layout.minimumInteritemSpacing = space;
+    _collectionHelper.layout.sectionInset = UIEdgeInsetsMake(space, space, space, space);
+}
+
+#pragma mark AMCollectionHelperDelegate
+
+- (Class)cellClassFor:(id)object {
     return [MovieCell class];
 }
 
-- (void)fillCell:(MovieCell *)cell withObject:(id)object {
+- (void)fillCell:(MovieCell *)cell object:(id)object {
     cell.movie = object;
 }
 
-- (void)actionForObject:(id)object {
+- (BOOL)actionFor:(id)object {
     [_rootViewController.navigationController pushViewController:[[MovieDetailsViewController alloc] initWithMovie:object] animated:YES];
+    return YES;
 }
 
-- (CGSize)cellSizeForObject:(id)object {
-    return [MovieCell sizeForContentWidth:self.collectionView.width - 20];
+- (CGSize)cellSizeFor:(id)object {
+    return [MovieCell sizeForContentWidth:_collectionHelper.collectionView.width space:15];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.collectionView.scrollIndicatorInsets = self.collectionView.contentInset; //fix indicators insets bug on ios 9
+    _collectionHelper.collectionView.scrollIndicatorInsets = _collectionHelper.collectionView.contentInset; //fix indicators insets bug on ios 9
+}
+
+- (BOOL)needsToShowNoObjectsView {
+    return _searchController.searchBar.text.length && !_collectionHelper.loader.fetchedItems.count;
+}
+
+#pragma mark AMPagingLoaderDelegate
+
+- (void)reloadView:(BOOL)animated {
+    [_collectionHelper setObjects:_collectionHelper.loader.fetchedItems animated:NO];
+}
+
+- (void)loadWithOffset:(id)offset completion:(void(^)(NSArray *objects, NSError *error, id newOffset))completion {
+    __weak typeof(self) wSelf = self;
+    [self.operationHelper runBlock:^(AMCompletion completion, AMHandleOperation operation, AMProgress progress) {
+        
+        SearchRequest *request = [SearchRequest new];
+        request.query = wSelf.searchController.searchBar.text;
+        request.page = offset;
+        operation([request send:completion]);
+        
+    } completion:^(SearchRequest *request, NSError *requestError) {
+        completion([NSManagedObject objectsWithIds:request.results context:AppContainer.shared.database.viewContext], requestError, request.updatedPage);
+        
+    } loading:self.collectionHelper.loader.fetchedItems.count ? AMLoadingTypeNone : AMLoadingTypeFullscreen key:@"feed"];
+}
+
+- (BOOL)hasRefreshControl {
+    return NO;
 }
 
 #pragma mark UISearchResultsUpdating
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController {
-    if ([searchController.searchBar.text isEqualToString:_lastSearchTerm]) {
+    if ([_searchController.searchBar.text isEqualToString:_lastSearchTerm]) {
         return;
     }
     
-    _currentPage = 1;
-    _endReached = NO;
+    [self.operationHelper cancellOperations];
     _lastSearchTerm = searchController.searchBar.text;
-    [self.currentOperation cancel];
+    
     if (searchController.searchBar.text.length > 2) {
-        self.view.backgroundColor = [UIColor whiteColor];
-        __weak typeof(self) weakSelf = self;
-        [self runBlock:^(CompletionBlock completion, HandleOperation handleOperation) {
-            
-            SearchRequest *request = [SearchRequest new];
-            request.query = searchController.searchBar.text;
-            request.page = _currentPage;
-            handleOperation([[ServiceProvider sharedProvider] sendRequest:request withCompletionBlock:completion]);
-            
-        } completion:^(SearchRequest *request, NSError *error) {
-            
-            if (!error || error.code != NSURLErrorCancelled) {
-                [weakSelf setObjects:[NSManagedObject objectsWithObjectIds:request.results]];
-            }
-            
-        } loading:self.objects.count ? LoadingTypeNone : LoadingTypeFull errorType:ErrorTypeFull];
-        
-    } else {
-        self.view.backgroundColor = [UIColor clearColor];
-        [self setObjects:nil];
+        [_collectionHelper.loader refreshFromBeginning:NO];
     }
-}
-
-#pragma mark UIScrollViewDelegate
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    _performedLoading = NO;
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (!decelerate) {
-        [self scrollViewDidEndDecelerating:scrollView];
-    }
-}
-
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (scrollView.contentSize.height >= scrollView.height &&
-        _performedLoading == NO &&
-        !self.currentOperation &&
-        !_endReached &&
-        _lastSearchTerm.length > 2 &&
-        scrollView.contentOffset.y > (scrollView.contentSize.height - scrollView.height)) {
-        
-        [self loadMore];
-    }
-}
-
-- (void)loadMore {
-    _performedLoading = YES;
-    __weak typeof(self) weakSelf = self;
-    NSUInteger newPage =  weakSelf.currentPage + 1;
-    [self runBlock:^(CompletionBlock completion, HandleOperation handleOperation) {
-        
-        SearchRequest *request = [SearchRequest new];
-        request.query = weakSelf.lastSearchTerm;
-        request.page = newPage;
-        handleOperation([[ServiceProvider sharedProvider] sendRequest:request withCompletionBlock:completion]);
-        
-    } completion:^(SearchRequest *request, NSError *error) {
-        
-        if (request.results.count) {
-            weakSelf.performedLoading = NO;
-            [weakSelf appendFetchedItems:[NSManagedObject objectsWithObjectIds:request.results]];
-        } else {
-            weakSelf.endReached = YES;
-        }
-        if (!error) {
-            weakSelf.currentPage = newPage;
-        }
-        
-    } loading:self.objects.count ? LoadingTypeNone : LoadingTypeNone errorType:ErrorTypeNone];
-}
-
-- (void)appendFetchedItems:(NSArray *)items {
-    NSMutableArray *array = [self.objects mutableCopy];
-    for (id object in items) {
-        if (![array containsObject:object]) {
-            [array addObject:object];
-        }
-    }
-    [self setObjects:array animated:YES];
 }
 
 @end

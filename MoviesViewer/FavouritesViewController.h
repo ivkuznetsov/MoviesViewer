@@ -6,8 +6,11 @@
 //  Copyright © 2016 Ilya Kuznetsov. All rights reserved.
 //
 
-#import "CollectionViewController.h"
+#import <AMAppkit/AMAppkit.h>
+#import "ObjectsContainer.h"
 
-@interface FavouritesViewController : CollectionViewController
+@interface FavouritesViewController : AMBaseViewController
+
+- (instancetype)initWithContainer:(ObjectsContainer *)container;
 
 @end
