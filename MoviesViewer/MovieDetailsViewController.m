@@ -7,7 +7,6 @@
 //
 
 #import "MovieDetailsViewController.h"
-#import "NSMutableArray+Validation.h"
 #import "FavouritesItem.h"
 
 @interface MovieDetailsViewController ()
