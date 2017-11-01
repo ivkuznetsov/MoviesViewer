@@ -30,7 +30,6 @@
 		59F7BE8A1CC275CC003610CE /* MovieCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59F7BE881CC275CC003610CE /* MovieCell.xib */; };
 		59F7BE9C1CC27779003610CE /* MovieDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F7BE9A1CC27779003610CE /* MovieDetailsViewController.m */; };
 		59F7BE9D1CC27779003610CE /* MovieDetailsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59F7BE9B1CC27779003610CE /* MovieDetailsViewController.xib */; };
-		59F7BEA01CC2788E003610CE /* NSManagedObject+Notifications.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F7BE9F1CC2788E003610CE /* NSManagedObject+Notifications.m */; };
 		59F7BEA71CC27DF0003610CE /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F7BEA51CC27DF0003610CE /* SearchViewController.m */; };
 		59F7BEAE1CC27F8B003610CE /* SearchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F7BEAD1CC27F8B003610CE /* SearchRequest.m */; };
 		59F7BEEF1CC2BAD9003610CE /* ObjectsContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 59F7BEEE1CC2BAD9003610CE /* ObjectsContainer.m */; };
@@ -41,7 +40,6 @@
 		D7E9DABB1FA7AAA80046A908 /* AMAppkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7E9DAB81FA7A9230046A908 /* AMAppkit.framework */; };
 		D7E9DABE1FA7ABD10046A908 /* BaseCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D7E9DABD1FA7ABD10046A908 /* BaseCell.m */; };
 		D7E9DAC11FA7ABFD0046A908 /* NSDictionary+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = D7E9DAC01FA7ABFD0046A908 /* NSDictionary+Validation.m */; };
-		D7E9DAC51FA7B6040046A908 /* NSMutableArray+Validation.m in Sources */ = {isa = PBXBuildFile; fileRef = D7E9DAC31FA7B6040046A908 /* NSMutableArray+Validation.m */; };
 		D7E9DAC81FA8BF440046A908 /* ConfigurationRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = D7E9DAC71FA8BF440046A908 /* ConfigurationRequest.m */; };
 		D7EE69D91FA616A7000B843C /* libAMDatabase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7EE69D61FA6169B000B843C /* libAMDatabase.a */; };
 		D7EE69E61FA6177E000B843C /* AppContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = D7EE69E51FA6177E000B843C /* AppContainer.m */; };
@@ -125,8 +123,6 @@
 		59F7BE991CC27779003610CE /* MovieDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieDetailsViewController.h; sourceTree = "<group>"; };
 		59F7BE9A1CC27779003610CE /* MovieDetailsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MovieDetailsViewController.m; sourceTree = "<group>"; };
 		59F7BE9B1CC27779003610CE /* MovieDetailsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MovieDetailsViewController.xib; sourceTree = "<group>"; };
-		59F7BE9E1CC2788E003610CE /* NSManagedObject+Notifications.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSManagedObject+Notifications.h"; sourceTree = "<group>"; };
-		59F7BE9F1CC2788E003610CE /* NSManagedObject+Notifications.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSManagedObject+Notifications.m"; sourceTree = "<group>"; };
 		59F7BEA41CC27DF0003610CE /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
 		59F7BEA51CC27DF0003610CE /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 		59F7BEAC1CC27F8B003610CE /* SearchRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchRequest.h; sourceTree = "<group>"; };
@@ -146,8 +142,6 @@
 		D7E9DABD1FA7ABD10046A908 /* BaseCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseCell.m; sourceTree = "<group>"; };
 		D7E9DABF1FA7ABFD0046A908 /* NSDictionary+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+Validation.h"; sourceTree = "<group>"; };
 		D7E9DAC01FA7ABFD0046A908 /* NSDictionary+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+Validation.m"; sourceTree = "<group>"; };
-		D7E9DAC31FA7B6040046A908 /* NSMutableArray+Validation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Validation.m"; sourceTree = "<group>"; };
-		D7E9DAC41FA7B6040046A908 /* NSMutableArray+Validation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Validation.h"; sourceTree = "<group>"; };
 		D7E9DAC61FA8BF440046A908 /* ConfigurationRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ConfigurationRequest.h; sourceTree = "<group>"; };
 		D7E9DAC71FA8BF440046A908 /* ConfigurationRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ConfigurationRequest.m; sourceTree = "<group>"; };
 		D7EE69D11FA6169B000B843C /* AMDatabase.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = AMDatabase.xcodeproj; path = AMDatabase/AMDatabase.xcodeproj; sourceTree = SOURCE_ROOT; };
@@ -315,8 +309,6 @@
 			isa = PBXGroup;
 			children = (
 				59F7BE411CC271BD003610CE /* Objects */,
-				59F7BE9E1CC2788E003610CE /* NSManagedObject+Notifications.h */,
-				59F7BE9F1CC2788E003610CE /* NSManagedObject+Notifications.m */,
 				59F7BE421CC271DA003610CE /* MoviesViewer.xcdatamodeld */,
 			);
 			name = Database;
@@ -412,8 +404,6 @@
 		D7E9DAC21FA7AC000046A908 /* Additions */ = {
 			isa = PBXGroup;
 			children = (
-				D7E9DAC41FA7B6040046A908 /* NSMutableArray+Validation.h */,
-				D7E9DAC31FA7B6040046A908 /* NSMutableArray+Validation.m */,
 				D7E9DABF1FA7ABFD0046A908 /* NSDictionary+Validation.h */,
 				D7E9DAC01FA7ABFD0046A908 /* NSDictionary+Validation.m */,
 			);
@@ -532,14 +522,12 @@
 				59F7BEF21CC35703003610CE /* DetailsRequest.m in Sources */,
 				59F7BE241CC25043003610CE /* ExploreViewController.m in Sources */,
 				59F7BDEC1CC2294B003610CE /* AFURLConnectionOperation.m in Sources */,
-				D7E9DAC51FA7B6040046A908 /* NSMutableArray+Validation.m in Sources */,
 				59F7BE891CC275CC003610CE /* MovieCell.m in Sources */,
 				59F7BEF51CC365D1003610CE /* PosterContainerView.m in Sources */,
 				59F7BEFE1CC38EAC003610CE /* FavouritesItem.m in Sources */,
 				59F7BDAD1CC21B70003610CE /* AppDelegate.m in Sources */,
 				59F7BE441CC271DA003610CE /* MoviesViewer.xcdatamodeld in Sources */,
 				D7EE69E91FA6359D000B843C /* Movie+Additions.m in Sources */,
-				59F7BEA01CC2788E003610CE /* NSManagedObject+Notifications.m in Sources */,
 				59F7BDD31CC22884003610CE /* ServiceRequest.m in Sources */,
 				59F7BDEB1CC2294B003610CE /* AFPropertyListRequestOperation.m in Sources */,
 				59F7BEA71CC27DF0003610CE /* SearchViewController.m in Sources */,
