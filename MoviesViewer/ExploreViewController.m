@@ -37,6 +37,7 @@
     CGFloat space = 15;
     _collectionHelper.layout.minimumInteritemSpacing = space;
     _collectionHelper.layout.sectionInset = UIEdgeInsetsMake(space, space, space, space);
+    _collectionHelper.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     if (@available(iOS 11.0, *)) {
         self.navigationItem.searchController = _searchVC.searchController;

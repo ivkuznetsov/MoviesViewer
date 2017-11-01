@@ -40,6 +40,7 @@
     self.operationHelper = [[AMOperationHelper alloc] initWithView:self.view];
     _collectionHelper = [[AMPagingCollectionHelper alloc] initWithView:self.view delegate:self];
     _collectionHelper.noObjectsView.titleLabel.text = @"No Results";
+    _collectionHelper.collectionView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     CGFloat space = 15;
     _collectionHelper.layout.minimumInteritemSpacing = space;
