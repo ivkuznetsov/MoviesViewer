@@ -82,9 +82,9 @@
 			children = (
 				D71640CB29293FE40059B519 /* Movie+Additions.swift */,
 				D71640E9292A31270059B519 /* ServiceProvider.swift */,
-				D71640C829293F320059B519 /* MoviesViewer.xcdatamodeld */,
 				D71640C529293E630059B519 /* DataLayer.swift */,
 				D7C1ACF3292A699E001B4459 /* ObjectsContainer.swift */,
+				D71640C829293F320059B519 /* MoviesViewer.xcdatamodeld */,
 			);
 			path = DataLayer;
 			sourceTree = "<group>";

@@ -22,3 +22,13 @@ extension Sequence {
         objects(DataLayer.shared.database.viewContext)
     }
 }
+
+extension NSManagedObject {
+    
+    static func object(uri: URL, ctx: NSManagedObjectContext = DataLayer.shared.database.viewContext) -> Self? {
+        if let objectId = DataLayer.shared.database.idFor(uriRepresentation: uri) {
+            return ctx.find(type: self, objectId: objectId)
+        }
+        return nil
+    }
+}

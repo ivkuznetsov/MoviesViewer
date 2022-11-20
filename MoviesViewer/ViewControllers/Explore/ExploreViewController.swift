@@ -8,7 +8,7 @@
 import UIKit
 import UIComponents
 
-class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDelegate {
+class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDelegate, PagingCachable {
     
     private var collection: PagingCollection!
     private let searchVC = SearchViewController()
@@ -31,6 +31,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
         collection.collection.keyboardDismissMode = .onDrag
         
         navigationItem.searchController = searchVC.searchController
+        reloadView(false)
         collection.loader.refreshFromBeginning(showRefresh: false)
     }
     
@@ -63,5 +64,16 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
             navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
         }
         return .deselectCell
+    }
+    
+    func saveFirstPageInCache(objects: [AnyHashable]) {
+        UserDefaults.standard.set((objects as? [Movie])?.compactMap { $0.objectID.uriRepresentation().absoluteString }, forKey: "firstPage")
+    }
+    
+    func loadFirstPageFromCache() -> [AnyHashable] {
+        if let ids = UserDefaults.standard.array(forKey: "firstPage") {
+            return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
+        }
+        return []
     }
 }
