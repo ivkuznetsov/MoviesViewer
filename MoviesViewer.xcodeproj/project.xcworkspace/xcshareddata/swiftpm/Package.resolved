@@ -1,0 +1,50 @@
+{
+  "pins" : [
+    {
+      "identity" : "commonutils",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "40d02769a91acacc1c73fb59b83e9b2a7322ae71"
+      }
+    },
+    {
+      "identity" : "database",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/Database.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "7497f50ddc559bb86042ba3cca1ebb59363d07ed"
+      }
+    },
+    {
+      "identity" : "network",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/Network.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "86eefbff2c41e7474aaae64aeb676b54c78db1ee"
+      }
+    },
+    {
+      "identity" : "sdwebimage",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SDWebImage/SDWebImage",
+      "state" : {
+        "revision" : "3312bf5e67b52fbce7c3caf431b0cda721a9f7bb",
+        "version" : "5.14.2"
+      }
+    },
+    {
+      "identity" : "uicomponents",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/UIComponents.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ccdf1cec5721784c78ee70c32eaf315e92b442fc"
+      }
+    }
+  ],
+  "version" : 2
+}
