@@ -45,7 +45,7 @@ class FavoritesViewController: BaseController, CollectionDelegate {
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.collection.width, space: 15)
+        MovieCell.size(contentWidth: collection.collection.defaultWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
