@@ -71,7 +71,7 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         table.set(objects: objects, animated: animated)
     }
     
-    func createCell(object: AnyHashable, table: Table) -> Table.Cell? {
+    func createCell(object: AnyHashable, table: Table) -> UITableView.Cell? {
         if let object = object as? Entry {
             return .init(DetailCell.self, { $0.entry = object })
         }

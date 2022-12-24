@@ -36,10 +36,10 @@ class FavoritesViewController: BaseController, CollectionDelegate {
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: favorites.objectsOnMain(), animated: animated, diffable: true)
+        collection.set(objects: favorites.objectsOnMain(), animated: animated)
     }
     
-    func createCell(object: AnyHashable, collection: Collection) -> Collection.Cell? {
+    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
         if let object = object as? Movie {
             return .init(MovieCell.self, { $0.movie = object })
         }
@@ -54,6 +54,6 @@ class FavoritesViewController: BaseController, CollectionDelegate {
         if let object = object as? Movie {
             navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
         }
-        return .deselectCell
+        return .deselect
     }
 }

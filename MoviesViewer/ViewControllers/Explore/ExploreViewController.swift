@@ -36,7 +36,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: collection.loader.fetchedItems, animated: animated, diffable: true)
+        collection.set(objects: collection.loader.fetchedItems, animated: animated)
     }
     
     func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
@@ -48,7 +48,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
         }, loading: collection.objects.count > 0 ? .none : .opaque, key: "feed")
     }
     
-    func createCell(object: AnyHashable, collection: Collection) -> Collection.Cell? {
+    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
         if let object = object as? Movie {
             return .init(MovieCell.self, { $0.movie = object })
         }
@@ -56,14 +56,14 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.collection.width, space: 15)
+        MovieCell.size(contentWidth: collection.availableCellWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
         if let object = object as? Movie {
             navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
         }
-        return .deselectCell
+        return .deselect
     }
     
     func saveFirstPageInCache(objects: [AnyHashable]) {

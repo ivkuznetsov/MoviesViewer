@@ -6,7 +6,7 @@
       "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "8a4d43f8d976e82b94308ab11875c008dc6681ff"
+        "revision" : "7c63b5f474cfef75018938b948fed2ad942311ff"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/ivkuznetsov/UIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "a9d4ea9b344f50cf63ac3d2a8b86d607fd059631"
+        "revision" : "b35d2948ea3b7a1f27bd9f5f37265ef487ed31b0"
       }
     }
   ],

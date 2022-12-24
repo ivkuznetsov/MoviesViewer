@@ -49,7 +49,7 @@ class MovieCell: BaseCollectionCell {
     }
     
     static func size(contentWidth: CGFloat, space: CGFloat) -> CGSize {
-        let width = contentWidth - space * 2
+        let width = contentWidth
         
         let count = floor(width / 150)
         if count == 0 { return CGSize(width: width, height: height(for: width)) }

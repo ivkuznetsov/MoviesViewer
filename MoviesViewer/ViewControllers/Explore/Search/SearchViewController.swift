@@ -40,7 +40,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: collection.loader.fetchedItems, animated: false, diffable: true)
+        collection.set(objects: collection.loader.fetchedItems, animated: false)
     }
     
     func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
@@ -60,7 +60,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         lastSearchQuery.count > 2 && self.collection.loader.fetchedItems.isEmpty
     }
     
-    func createCell(object: AnyHashable, collection: Collection) -> Collection.Cell? {
+    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
         if let object = object as? Movie {
             return .init(MovieCell.self, { $0.movie = object })
         }
@@ -75,7 +75,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         if let object = object as? Movie {
             presentingViewController?.navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
         }
-        return .deselectCell
+        return .deselect
     }
     
     func updateSearchResults(for searchController: UISearchController) {
