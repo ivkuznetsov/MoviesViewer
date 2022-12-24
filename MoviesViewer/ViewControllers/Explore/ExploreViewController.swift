@@ -24,10 +24,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
         
         collection = PagingCollection(view: view, pagingDelegate: self)
         collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        let space: CGFloat = 15
-        
-        collection.layout?.minimumInteritemSpacing = space
-        collection.layout?.sectionInset = UIEdgeInsets(top: 0, left: space, bottom: space, right: space)
+        collection.collection.set(cellsPadding: 15)
         collection.collection.keyboardDismissMode = .onDrag
         
         navigationItem.searchController = searchVC.searchController
@@ -56,7 +53,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.availableCellWidth, space: 15)
+        MovieCell.size(contentWidth: collection.collection.defaultWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {

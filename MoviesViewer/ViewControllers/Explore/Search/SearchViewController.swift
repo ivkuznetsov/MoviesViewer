@@ -31,10 +31,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         
         collection = PagingCollection(view: view, pagingDelegate: self)
         collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        let space: CGFloat = 15
-        
-        collection.layout?.minimumInteritemSpacing = space
-        collection.layout?.sectionInset = UIEdgeInsets(top: 0, left: space, bottom: space, right: space)
+        collection.collection.set(cellsPadding: 15)
         collection.noObjectsView.title.text = "No Results"
         collection.collection.keyboardDismissMode = .onDrag
     }

@@ -7,6 +7,7 @@
 
 import UIKit
 import UIComponents
+import CommonUtils
 
 struct Entry: Hashable {
     let title: String

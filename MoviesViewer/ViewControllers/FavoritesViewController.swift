@@ -23,9 +23,7 @@ class FavoritesViewController: BaseController, CollectionDelegate {
         super.viewDidLoad()
         
         collection = Collection(view: view, delegate: self)
-        let space: CGFloat = 15
-        collection.layout?.minimumInteritemSpacing = space
-        collection.layout?.sectionInset = UIEdgeInsets(top: space, left: space, bottom: space, right: space)
+        collection.collection.set(cellsPadding: 15)
         collection.noObjectsView.title.text = "No Favorites"
         collection.noObjectsView.details.text = "Push ⭑ button in movie details\nto make it favorite"
         
