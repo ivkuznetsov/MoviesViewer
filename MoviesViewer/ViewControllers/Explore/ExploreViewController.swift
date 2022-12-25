@@ -24,8 +24,8 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
         
         collection = PagingCollection(view: view, pagingDelegate: self)
         collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        collection.collection.set(cellsPadding: 15)
-        collection.collection.keyboardDismissMode = .onDrag
+        collection.list.set(cellsPadding: 15)
+        collection.list.keyboardDismissMode = .onDrag
         
         navigationItem.searchController = searchVC.searchController
         reloadView(false)
@@ -33,7 +33,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: collection.loader.fetchedItems, animated: animated)
+        collection.set(collection.loader.fetchedItems, animated: animated)
     }
     
     func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
@@ -53,7 +53,7 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.collection.defaultWidth, space: 15)
+        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {

@@ -31,13 +31,13 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         
         collection = PagingCollection(view: view, pagingDelegate: self)
         collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        collection.collection.set(cellsPadding: 15)
-        collection.noObjectsView.title.text = "No Results"
-        collection.collection.keyboardDismissMode = .onDrag
+        collection.list.set(cellsPadding: 15)
+        collection.noObjectsView.header.text = "No Results"
+        collection.list.keyboardDismissMode = .onDrag
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: collection.loader.fetchedItems, animated: false)
+        collection.set(collection.loader.fetchedItems, animated: false)
     }
     
     func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
@@ -65,7 +65,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.collection.defaultWidth, space: 15)
+        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {

@@ -32,8 +32,8 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         super.viewDidLoad()
         
         table = Table(view: view, delegate: self)
-        table.table.tableHeaderView = UIView()
-        table.table.separatorInset = .zero
+        table.list.tableHeaderView = UIView()
+        table.list.separatorInset = .zero
         header.movie = movie
         
         _movie.didChange = { [weak self] replaced in
@@ -68,7 +68,7 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         addEntry("Countries", movie.countries?.joined(separator: "\n"))
         addEntry("Overview", movie.overview )
         
-        table.set(objects: objects, animated: animated)
+        table.set(objects, animated: animated)
     }
     
     func createCell(object: AnyHashable, table: Table) -> UITableView.Cell? {

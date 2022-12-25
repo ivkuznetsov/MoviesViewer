@@ -23,8 +23,8 @@ class FavoritesViewController: BaseController, CollectionDelegate {
         super.viewDidLoad()
         
         collection = Collection(view: view, delegate: self)
-        collection.collection.set(cellsPadding: 15)
-        collection.noObjectsView.title.text = "No Favorites"
+        collection.list.set(cellsPadding: 15)
+        collection.noObjectsView.header.text = "No Favorites"
         collection.noObjectsView.details.text = "Push ⭑ button in movie details\nto make it favorite"
         
         favorites.observe(self) { [weak self] _ in
@@ -34,7 +34,7 @@ class FavoritesViewController: BaseController, CollectionDelegate {
     }
     
     override func reloadView(_ animated: Bool) {
-        collection.set(objects: favorites.objectsOnMain(), animated: animated)
+        collection.set(favorites.objectsOnMain(), animated: animated)
     }
     
     func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
@@ -45,7 +45,7 @@ class FavoritesViewController: BaseController, CollectionDelegate {
     }
     
     func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.collection.defaultWidth, space: 15)
+        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
     }
     
     func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
