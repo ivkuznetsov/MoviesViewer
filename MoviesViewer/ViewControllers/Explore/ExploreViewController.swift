@@ -7,6 +7,7 @@
 
 import UIKit
 import UIComponents
+import CommonUtils
 
 class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDelegate, PagingCachable {
     
@@ -29,14 +30,14 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
         
         navigationItem.searchController = searchVC.searchController
         reloadView(false)
-        collection.loader.refreshFromBeginning(showRefresh: false)
+        collection.loader.refresh(showLoading: false)
     }
     
     override func reloadView(_ animated: Bool) {
         collection.set(collection.loader.fetchedItems, animated: animated)
     }
     
-    func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
+    func load(offset: Any?, showLoading: Bool, completion: @escaping ([AnyHashable]?, Error?, Any?) -> ()) {
         operationHelper.run({ innerCompletion, _ in
             Movie.mostPopular(offset: offset).run { result in
                 innerCompletion(result.error)

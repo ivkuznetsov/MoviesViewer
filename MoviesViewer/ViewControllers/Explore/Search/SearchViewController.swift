@@ -7,6 +7,7 @@
 
 import UIKit
 import UIComponents
+import CommonUtils
 
 class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoaderDelegate, CollectionDelegate {
     
@@ -40,7 +41,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         collection.set(collection.loader.fetchedItems, animated: false)
     }
     
-    func load(offset: Any?, completion: @escaping ([AnyHashable], Error?, _ offset: Any?)->()) {
+    func load(offset: Any?, showLoading: Bool, completion: @escaping ([AnyHashable]?, Error?, Any?) -> ()) {
         let text = searchController.searchBar.text ?? ""
         
         operationHelper.run({ innerCompletion, _ in
@@ -82,7 +83,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
         lastSearchQuery = query
         
         if query.count > 2 {
-            collection.loader.refreshFromBeginning(showRefresh: false)
+            collection.loader.refresh(showLoading: false)
         } else {
             collection.loader.set(fetchedItems: [], offset: nil)
             reloadView(false)
