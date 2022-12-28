@@ -46,10 +46,6 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         }, loading: movie?.isLoaded == true ? .none : .opaque)
     }
     
-    @objc private func favoriteAction() {
-        
-    }
-    
     override func reloadView(_ animated: Bool) {
         guard let movie = movie else {
             navigationController?.popViewController(animated: true)
