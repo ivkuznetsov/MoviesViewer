@@ -33,8 +33,8 @@ class MovieDetailsViewController: BaseController {
         super.viewDidLoad()
         
         table.attachTo(view)
-        table.list.tableHeaderView = UIView()
-        table.list.separatorInset = .zero
+        table.view.tableHeaderView = UIView()
+        table.view.separatorInset = .zero
         table.set(cellsInfo: [.init(Entry.self, DetailCell.self, { $1.entry = $0 })])
         header.movie = movie
         

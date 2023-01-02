@@ -25,12 +25,12 @@ class ExploreViewController: BaseController {
         
         collection.list.attachTo(view)
         collection.footerLoadingInset = CGSize(width: 0, height: 300)
-        collection.list.list.set(cellsPadding: 15)
-        collection.list.list.keyboardDismissMode = .onDrag
+        collection.list.view.set(cellsPadding: 15)
+        collection.list.view.keyboardDismissMode = .onDrag
         
         collection.list.set(cellsInfo: [.init(Movie.self, MovieCell.self, { $1.movie = $0 },
                                               size: { [unowned self] _ in
-            MovieCell.size(contentWidth: collection.list.list.defaultWidth, space: 15)
+            MovieCell.size(contentWidth: collection.list.view.defaultWidth, space: 15)
         }, action: { [unowned self] in
             navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
             return .deselect
@@ -44,11 +44,11 @@ class ExploreViewController: BaseController {
             return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
         })
         
-        collection.load = { [unowned self] offset, _ in
-            loadingPresenter.helper.run(collection.page != nil ? .none : .opaque, reuseKey: "feed") {
+        collection.loadPage = { [unowned self] offset, _, completion in
+            loadingPresenter.helper.run(collection.content != nil ? .none : .opaque, reuseKey: "feed") {
                 Movie.mostPopular(offset: offset).convertOnMain { ids, next in
-                    LoadedPage(ids.objects(), offset: next)
-                }
+                    PagedContent(ids.objects(), next: next)
+                }.completionOnMain(completion)
             }
         }
         

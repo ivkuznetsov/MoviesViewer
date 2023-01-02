@@ -116,13 +116,6 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
-		D744B17D2963438D00341419 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		D744B180296344C600341419 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -133,7 +126,6 @@
 		D7BB284B2929360400C74BAE = {
 			isa = PBXGroup;
 			children = (
-				D744B17D2963438D00341419 /* Packages */,
 				D7BB28562929360400C74BAE /* MoviesViewer */,
 				D7BB28552929360400C74BAE /* Products */,
 				D744B180296344C600341419 /* Frameworks */,

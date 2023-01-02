@@ -23,7 +23,7 @@ class FavoritesViewController: BaseController {
         super.viewDidLoad()
         
         collection.attachTo(view)
-        collection.list.set(cellsPadding: 15)
+        collection.view.set(cellsPadding: 15)
         (collection.emptyStateView as! NoObjectsView).header.text = "No Favorites"
         (collection.emptyStateView as! NoObjectsView).details.text = "Push ⭑ button in movie details\nto make it favorite"
         
@@ -31,7 +31,7 @@ class FavoritesViewController: BaseController {
                                          MovieCell.self,
                                          { $1.movie = $0 },
                                          size: { [unowned self] _ in
-            MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
+            MovieCell.size(contentWidth: collection.view.defaultWidth, space: 15)
         }, action: { [unowned self] in
             navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
             return .deselect
