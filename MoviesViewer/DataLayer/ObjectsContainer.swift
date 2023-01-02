@@ -15,17 +15,15 @@ class ObjectsContainer<T: NSManagedObject>: Observable {
     private let key: String
     private let database: Database
     
-    @RWAtomic private var ids: [ObjectId<T>] = [] {
-        didSet { UserDefaults.standard.set(ids.map { $0.objectId.uriRepresentation() }, forKey: key) }
-    }
+    @RWAtomic private var ids: [ObjectId<T>] = []
     
     init(key: String, database: Database) {
         self.key = key
         self.database = database
         
-        if let array = UserDefaults.standard.array(forKey: key) as? [URL] {
+        if let array = UserDefaults.standard.array(forKey: key) as? [String] {
             ids = array.compactMap({
-                if let objectId = database.idFor(uriRepresentation: $0),
+                if let objectId = database.idFor(uriRepresentation: URL(string: $0)!),
                    let object = database.viewContext.find(type: T.self, objectId: objectId) {
                     return ObjectId(object)
                 }
@@ -41,6 +39,7 @@ class ObjectsContainer<T: NSManagedObject>: Observable {
             if !$0.contains(objectId) {
                 $0.append(objectId)
             }
+            UserDefaults.standard.set($0.map { $0.objectId.uriRepresentation().absoluteString }, forKey: key)
         }
         post(nil)
     }

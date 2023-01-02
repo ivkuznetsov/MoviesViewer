@@ -7,12 +7,13 @@
 
 import Foundation
 import UIComponents
+import CommonUtils
 import Database
 import UIKit
 
-class MovieDetailsViewController: BaseController, TableDelegate {
+class MovieDetailsViewController: BaseController {
     
-    private var table: Table!
+    private let table = Table()
     @DBObservable private var movie: Movie?
     private let header = MovieHeaderView.loadFromNib()
     
@@ -31,9 +32,10 @@ class MovieDetailsViewController: BaseController, TableDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        table = Table(view: view, delegate: self)
+        table.attachTo(view)
         table.list.tableHeaderView = UIView()
         table.list.separatorInset = .zero
+        table.set(cellsInfo: [.init(Entry.self, DetailCell.self, { $1.entry = $0 })])
         header.movie = movie
         
         _movie.didChange = { [weak self] replaced in
@@ -41,9 +43,9 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         }
         reloadView(false)
         
-        operationHelper.run({ [weak self] completion, _ in
-            self?.movie?.updateDetails().runWith(completion)
-        }, loading: movie?.isLoaded == true ? .none : .opaque)
+        loadingPresenter.helper.run(movie?.isLoaded == true ? .none : .opaque) { [weak self] in
+            self?.movie?.updateDetails()
+        }
     }
     
     override func reloadView(_ animated: Bool) {
@@ -65,12 +67,5 @@ class MovieDetailsViewController: BaseController, TableDelegate {
         addEntry("Overview", movie.overview )
         
         table.set(objects, animated: animated)
-    }
-    
-    func createCell(object: AnyHashable, table: Table) -> UITableView.Cell? {
-        if let object = object as? Entry {
-            return .init(DetailCell.self, { $0.entry = object })
-        }
-        return nil
     }
 }

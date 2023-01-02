@@ -9,10 +9,10 @@ import UIKit
 import UIComponents
 import CommonUtils
 
-class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoaderDelegate, CollectionDelegate {
+class SearchViewController: BaseController, UISearchResultsUpdating {
     
     private(set) var searchController: UISearchController!
-    private var collection: PagingCollection!
+    private let collection = PagingCollection(hasRefreshControl: false)
     private var lastSearchQuery: String = ""
     
     override init() {
@@ -30,63 +30,43 @@ class SearchViewController: BaseController, UISearchResultsUpdating, PagingLoade
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collection = PagingCollection(view: view, pagingDelegate: self)
-        collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        collection.list.set(cellsPadding: 15)
-        collection.noObjectsView.header.text = "No Results"
-        collection.list.keyboardDismissMode = .onDrag
-    }
-    
-    override func reloadView(_ animated: Bool) {
-        collection.set(collection.loader.fetchedItems, animated: false)
-    }
-    
-    func load(offset: Any?, showLoading: Bool, completion: @escaping ([AnyHashable]?, Error?, Any?) -> ()) {
-        let text = searchController.searchBar.text ?? ""
+        collection.list.attachTo(view)
+        collection.footerLoadingInset = CGSize(width: 0, height: 300)
+        collection.list.list.set(cellsPadding: 15)
+        (collection.list.emptyStateView as! NoObjectsView).header.text = "No Results"
+        collection.list.list.keyboardDismissMode = .onDrag
         
-        operationHelper.run({ innerCompletion, _ in
-            Movie.search(query: text, offset: offset).run { result in
-                innerCompletion(result.error)
-                completion(result.value?.ids.objects() ?? [], result.error, result.value?.next)
+        collection.list.set(cellsInfo: [.init(Movie.self, MovieCell.self, { $1.movie = $0 },
+                                              size: { [unowned self] _ in
+            MovieCell.size(contentWidth: collection.list.list.defaultWidth, space: 15)
+        }, action: { [unowned self] in
+            presentingViewController?.navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
+            return .deselect
+        })])
+        
+        collection.list.showNoData = { [unowned self] in
+            lastSearchQuery.count > 2 && $0.isEmpty
+        }
+        
+        collection.load = { [unowned self] offset, _ in
+            loadingPresenter.helper.run(collection.page == nil ? .opaque : .none, reuseKey: "feed") {
+                Movie.search(query: self.searchController.searchBar.text ?? "", offset: offset).convertOnMain { ids, next in
+                    LoadedPage(ids.objects(), offset: next)
+                }
             }
-        }, loading: collection.loader.fetchedItems.count > 0 ? .none : .opaque, key: "feed")
-    }
-    
-    func hasRefreshControl() -> Bool { false }
-    
-    func shouldShowNoData(_ objects: [AnyHashable], collection: Collection) -> Bool {
-        lastSearchQuery.count > 2 && self.collection.loader.fetchedItems.isEmpty
-    }
-    
-    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
-        if let object = object as? Movie {
-            return .init(MovieCell.self, { $0.movie = object })
         }
-        return nil
-    }
-    
-    func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
-    }
-    
-    func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
-        if let object = object as? Movie {
-            presentingViewController?.navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
-        }
-        return .deselect
     }
     
     func updateSearchResults(for searchController: UISearchController) {
         guard let query = searchController.searchBar.text, query != lastSearchQuery else { return }
         
-        operationHelper.cancelOperations()
+        loadingPresenter.helper.cancelOperations()
         lastSearchQuery = query
         
         if query.count > 2 {
-            collection.loader.refresh(showLoading: false)
+            collection.refresh()
         } else {
-            collection.loader.set(fetchedItems: [], offset: nil)
-            reloadView(false)
+            collection.page = nil
         }
     }
 }

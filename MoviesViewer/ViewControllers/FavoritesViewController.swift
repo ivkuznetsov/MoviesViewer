@@ -7,25 +7,35 @@
 
 import UIKit
 import UIComponents
+import CommonUtils
 
-class FavoritesViewController: BaseController, CollectionDelegate {
+class FavoritesViewController: BaseController {
     
-    private var collection: Collection!
+    private let collection = Collection()
     private let favorites = Movie.favorites
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
         title = "Favorites"
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collection = Collection(view: view, delegate: self)
+        collection.attachTo(view)
         collection.list.set(cellsPadding: 15)
-        collection.noObjectsView.header.text = "No Favorites"
-        collection.noObjectsView.details.text = "Push ⭑ button in movie details\nto make it favorite"
+        (collection.emptyStateView as! NoObjectsView).header.text = "No Favorites"
+        (collection.emptyStateView as! NoObjectsView).details.text = "Push ⭑ button in movie details\nto make it favorite"
+        
+        collection.set(cellsInfo: [.init(Movie.self,
+                                         MovieCell.self,
+                                         { $1.movie = $0 },
+                                         size: { [unowned self] _ in
+            MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
+        }, action: { [unowned self] in
+            navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
+            return .deselect
+        })])
         
         favorites.observe(self) { [weak self] _ in
             self?.reloadView(true)
@@ -35,23 +45,5 @@ class FavoritesViewController: BaseController, CollectionDelegate {
     
     override func reloadView(_ animated: Bool) {
         collection.set(favorites.objectsOnMain(), animated: animated)
-    }
-    
-    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
-        if let object = object as? Movie {
-            return .init(MovieCell.self, { $0.movie = object })
-        }
-        return nil
-    }
-    
-    func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
-    }
-    
-    func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
-        if let object = object as? Movie {
-            navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
-        }
-        return .deselect
     }
 }

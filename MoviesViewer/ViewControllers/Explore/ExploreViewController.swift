@@ -9,9 +9,9 @@ import UIKit
 import UIComponents
 import CommonUtils
 
-class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDelegate, PagingCachable {
+class ExploreViewController: BaseController {
     
-    private var collection: PagingCollection!
+    private let collection = PagingCollection()
     private let searchVC = SearchViewController()
     
     required init?(coder aDecoder: NSCoder) {
@@ -23,55 +23,36 @@ class ExploreViewController: BaseController, PagingLoaderDelegate, CollectionDel
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collection = PagingCollection(view: view, pagingDelegate: self)
-        collection.loader.footerLoadingInset = CGSize(width: 0, height: 300)
-        collection.list.set(cellsPadding: 15)
-        collection.list.keyboardDismissMode = .onDrag
+        collection.list.attachTo(view)
+        collection.footerLoadingInset = CGSize(width: 0, height: 300)
+        collection.list.list.set(cellsPadding: 15)
+        collection.list.list.keyboardDismissMode = .onDrag
+        
+        collection.list.set(cellsInfo: [.init(Movie.self, MovieCell.self, { $1.movie = $0 },
+                                              size: { [unowned self] _ in
+            MovieCell.size(contentWidth: collection.list.list.defaultWidth, space: 15)
+        }, action: { [unowned self] in
+            navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
+            return .deselect
+        })])
+        
+        collection.firstPageCache = (save: {
+            let items = ($0 as? [Movie])?.compactMap { $0.objectID.uriRepresentation().absoluteString }
+            UserDefaults.standard.set(items, forKey: "firstPage")
+        }, load: {
+            let ids = UserDefaults.standard.array(forKey: "firstPage") ?? []
+            return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
+        })
+        
+        collection.load = { [unowned self] offset, _ in
+            loadingPresenter.helper.run(collection.page != nil ? .none : .opaque, reuseKey: "feed") {
+                Movie.mostPopular(offset: offset).convertOnMain { ids, next in
+                    LoadedPage(ids.objects(), offset: next)
+                }
+            }
+        }
         
         navigationItem.searchController = searchVC.searchController
-        reloadView(false)
-        collection.loader.refresh(showLoading: false)
-    }
-    
-    override func reloadView(_ animated: Bool) {
-        collection.set(collection.loader.fetchedItems, animated: animated)
-    }
-    
-    func load(offset: Any?, showLoading: Bool, completion: @escaping ([AnyHashable]?, Error?, Any?) -> ()) {
-        operationHelper.run({ innerCompletion, _ in
-            Movie.mostPopular(offset: offset).run { result in
-                innerCompletion(result.error)
-                completion(result.value?.ids.objects() ?? [], result.error, result.value?.next)
-            }
-        }, loading: collection.objects.count > 0 ? .none : .opaque, key: "feed")
-    }
-    
-    func createCell(object: AnyHashable, collection: Collection) -> UICollectionView.Cell? {
-        if let object = object as? Movie {
-            return .init(MovieCell.self, { $0.movie = object })
-        }
-        return nil
-    }
-    
-    func cellSizeFor(object: AnyHashable, collection: Collection) -> CGSize? {
-        MovieCell.size(contentWidth: collection.list.defaultWidth, space: 15)
-    }
-    
-    func action(object: AnyHashable, collection: Collection) -> Collection.Result? {
-        if let object = object as? Movie {
-            navigationController?.pushViewController(MovieDetailsViewController(movie: object), animated: true)
-        }
-        return .deselect
-    }
-    
-    func saveFirstPageInCache(objects: [AnyHashable]) {
-        UserDefaults.standard.set((objects as? [Movie])?.compactMap { $0.objectID.uriRepresentation().absoluteString }, forKey: "firstPage")
-    }
-    
-    func loadFirstPageFromCache() -> [AnyHashable] {
-        if let ids = UserDefaults.standard.array(forKey: "firstPage") {
-            return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
-        }
-        return []
+        collection.refresh()
     }
 }
