@@ -6,7 +6,7 @@
       "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "755250359e5f5a13af4c428bf0815727a7d93c0a"
+        "revision" : "5be1c0d8f8f0cf4be87362092717e2de5e54bc9f"
       }
     },
     {
@@ -37,12 +37,21 @@
       }
     },
     {
+      "identity" : "shareduicomponents",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/SharedUIComponents.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "eae7e676d5db3c613bbc3166425c41e5e3b0a136"
+      }
+    },
+    {
       "identity" : "uicomponents",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivkuznetsov/UIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "a5e675d0f913739087b6935d7c00c11e143143ea"
+        "revision" : "8b6500219ece4d31edd5721b528b233f300ba307"
       }
     }
   ],

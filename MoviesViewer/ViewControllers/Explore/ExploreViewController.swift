@@ -6,8 +6,8 @@
 //
 
 import UIKit
+import SharedUIComponents
 import UIComponents
-import CommonUtils
 
 class ExploreViewController: BaseController {
     
@@ -24,17 +24,17 @@ class ExploreViewController: BaseController {
         super.viewDidLoad()
         
         collection.list.attachTo(view)
-        collection.footerLoadingInset = CGSize(width: 0, height: 300)
         collection.list.view.set(cellsPadding: 15)
         collection.list.view.keyboardDismissMode = .onDrag
         
-        collection.list.set(cellsInfo: [.init(Movie.self, MovieCell.self, { $1.movie = $0 },
-                                              size: { [unowned self] _ in
+        collection.list.setCell(for: Movie.self,
+                                type: MovieCell.self,
+                                fill: { $1.movie = $0 },
+                                size: { [unowned self] _ in
             MovieCell.size(contentWidth: collection.list.view.defaultWidth, space: 15)
         }, action: { [unowned self] in
             navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
-            return .deselect
-        })])
+        })
         
         collection.firstPageCache = (save: {
             let items = ($0 as? [Movie])?.compactMap { $0.objectID.uriRepresentation().absoluteString }

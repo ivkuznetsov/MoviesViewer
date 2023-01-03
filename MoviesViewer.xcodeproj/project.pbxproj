@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D709D2172963583500C74FA2 /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = D709D2162963583500C74FA2 /* UIComponents */; };
+		D704AC112964826600F3DA8B /* UIComponents in Frameworks */ = {isa = PBXBuildFile; productRef = D704AC102964826600F3DA8B /* UIComponents */; };
 		D71640C629293E630059B519 /* DataLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71640C529293E630059B519 /* DataLayer.swift */; };
 		D71640CA29293F320059B519 /* MoviesViewer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D71640C829293F320059B519 /* MoviesViewer.xcdatamodeld */; };
 		D71640CC29293FE40059B519 /* Movie+Additions.swift in Sources */ = {isa = PBXBuildFile; fileRef = D71640CB29293FE40059B519 /* Movie+Additions.swift */; };
@@ -67,7 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D709D2172963583500C74FA2 /* UIComponents in Frameworks */,
+				D704AC112964826600F3DA8B /* UIComponents in Frameworks */,
 				D7BB2873292936DC00C74BAE /* Network in Frameworks */,
 				D71640ED292A3FA00059B519 /* SDWebImage in Frameworks */,
 				D7BB2870292936C700C74BAE /* Database in Frameworks */,
@@ -77,6 +77,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D704AC02296474D000F3DA8B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		D71640C429293E550059B519 /* DataLayer */ = {
 			isa = PBXGroup;
 			children = (
@@ -126,6 +133,7 @@
 		D7BB284B2929360400C74BAE = {
 			isa = PBXGroup;
 			children = (
+				D704AC02296474D000F3DA8B /* Packages */,
 				D7BB28562929360400C74BAE /* MoviesViewer */,
 				D7BB28552929360400C74BAE /* Products */,
 				D744B180296344C600341419 /* Frameworks */,
@@ -207,7 +215,7 @@
 				D7BB286F292936C700C74BAE /* Database */,
 				D7BB2872292936DC00C74BAE /* Network */,
 				D71640EC292A3FA00059B519 /* SDWebImage */,
-				D709D2162963583500C74FA2 /* UIComponents */,
+				D704AC102964826600F3DA8B /* UIComponents */,
 			);
 			productName = MoviesViewer;
 			productReference = D7BB28542929360400C74BAE /* MoviesViewer.app */;
@@ -241,7 +249,7 @@
 				D7BB286E292936C700C74BAE /* XCRemoteSwiftPackageReference "Database" */,
 				D7BB2871292936DC00C74BAE /* XCRemoteSwiftPackageReference "Network" */,
 				D71640EB292A3FA00059B519 /* XCRemoteSwiftPackageReference "SDWebImage" */,
-				D709D2152963583500C74FA2 /* XCRemoteSwiftPackageReference "UIComponents" */,
+				D704AC0F2964826600F3DA8B /* XCRemoteSwiftPackageReference "UIComponents" */,
 			);
 			productRefGroup = D7BB28552929360400C74BAE /* Products */;
 			projectDirPath = "";
@@ -498,7 +506,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D709D2152963583500C74FA2 /* XCRemoteSwiftPackageReference "UIComponents" */ = {
+		D704AC0F2964826600F3DA8B /* XCRemoteSwiftPackageReference "UIComponents" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ivkuznetsov/UIComponents.git";
 			requirement = {
@@ -533,9 +541,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D709D2162963583500C74FA2 /* UIComponents */ = {
+		D704AC102964826600F3DA8B /* UIComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D709D2152963583500C74FA2 /* XCRemoteSwiftPackageReference "UIComponents" */;
+			package = D704AC0F2964826600F3DA8B /* XCRemoteSwiftPackageReference "UIComponents" */;
 			productName = UIComponents;
 		};
 		D71640EC292A3FA00059B519 /* SDWebImage */ = {

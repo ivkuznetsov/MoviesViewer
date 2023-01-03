@@ -7,7 +7,7 @@
 
 import UIKit
 import UIComponents
-import CommonUtils
+import SharedUIComponents
 
 class SearchViewController: BaseController, UISearchResultsUpdating {
     
@@ -31,18 +31,18 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
         super.viewDidLoad()
         
         collection.list.attachTo(view)
-        collection.footerLoadingInset = CGSize(width: 0, height: 300)
         collection.list.view.set(cellsPadding: 15)
         (collection.list.emptyStateView as! NoObjectsView).header.text = "No Results"
         collection.list.view.keyboardDismissMode = .onDrag
         
-        collection.list.set(cellsInfo: [.init(Movie.self, MovieCell.self, { $1.movie = $0 },
-                                              size: { [unowned self] _ in
+        collection.list.setCell(for: Movie.self,
+                                type: MovieCell.self,
+                                fill: { $1.movie = $0 },
+                                size: { [unowned self] _ in
             MovieCell.size(contentWidth: collection.list.view.defaultWidth, space: 15)
         }, action: { [unowned self] in
             presentingViewController?.navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
-            return .deselect
-        })])
+        })
         
         collection.list.showNoData = { [unowned self] in
             lastSearchQuery.count > 2 && $0.isEmpty

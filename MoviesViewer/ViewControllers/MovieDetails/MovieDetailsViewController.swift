@@ -7,7 +7,7 @@
 
 import Foundation
 import UIComponents
-import CommonUtils
+import SharedUIComponents
 import Database
 import UIKit
 
@@ -35,7 +35,10 @@ class MovieDetailsViewController: BaseController {
         table.attachTo(view)
         table.view.tableHeaderView = UIView()
         table.view.separatorInset = .zero
-        table.set(cellsInfo: [.init(Entry.self, DetailCell.self, { $1.entry = $0 })])
+        table.setCell(for: Entry.self,
+                      type: DetailCell.self,
+                      fill: { $1.entry = $0 })
+        
         header.movie = movie
         
         _movie.didChange = { [weak self] replaced in

@@ -7,7 +7,7 @@
 
 import UIKit
 import UIComponents
-import CommonUtils
+import SharedUIComponents
 
 class FavoritesViewController: BaseController {
     
@@ -27,15 +27,14 @@ class FavoritesViewController: BaseController {
         (collection.emptyStateView as! NoObjectsView).header.text = "No Favorites"
         (collection.emptyStateView as! NoObjectsView).details.text = "Push ⭑ button in movie details\nto make it favorite"
         
-        collection.set(cellsInfo: [.init(Movie.self,
-                                         MovieCell.self,
-                                         { $1.movie = $0 },
-                                         size: { [unowned self] _ in
+        collection.setCell(for: Movie.self,
+                           type: MovieCell.self,
+                           fill: { $1.movie = $0 },
+                           size: { [unowned self] _ in
             MovieCell.size(contentWidth: collection.view.defaultWidth, space: 15)
         }, action: { [unowned self] in
             navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
-            return .deselect
-        })])
+        })
         
         favorites.observe(self) { [weak self] _ in
             self?.reloadView(true)

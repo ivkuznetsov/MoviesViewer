@@ -6,8 +6,7 @@
 //
 
 import UIKit
-import UIComponents
-import CommonUtils
+import SharedUIComponents
 
 struct Entry: Hashable {
     let title: String
