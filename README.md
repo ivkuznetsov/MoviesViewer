@@ -2,13 +2,13 @@
 
 Example project for demonstrating building MVC-based app with helping of additional frameworks:
 
-##Database
+## Database
 
 [https://github.com/ivkuznetsov/Database](https://github.com/ivkuznetsov/Database)
 
 A CoreData wrapper with multithreading and convenient interface.
 
-##CommonUtils
+## CommonUtils
 
 [https://github.com/ivkuznetsov/CommonUtils](https://github.com/ivkuznetsov/CommonUtils)
 
@@ -16,7 +16,7 @@ Classes and extensions to simplify things.
 
 Work - an NSOperation based tasks management. It helps to make chaining and grouping of operations with cancelling and progress support.
 
-##UIComponents and SharedUIComponents
+## UIComponents and SharedUIComponents
 
 [https://github.com/ivkuznetsov/UIComponents](https://github.com/ivkuznetsov/UIComponents)
 [https://github.com/ivkuznetsov/SharedUIComponents](https://github.com/ivkuznetsov/SharedUIComponents)
@@ -27,8 +27,16 @@ PagingCollection and PagingTable - additional improvement of Collection and Tabl
 
 LoadingPresenter - a helper that handles several types of loading and error presentations in view during operation performing.
 
-##Network
+## Network
 
 [https://github.com/ivkuznetsov/Network](https://github.com/ivkuznetsov/Network)
 
 A service provider for sending http requests. It handles a retrieving, storing in Keychain and refreshing of the authorization token.
+
+## Meta
+
+Ilya Kuznetsov – i.v.kuznecov@gmail.com
+
+Distributed under the MIT license. See ``LICENSE`` for more information.
+
+[https://github.com/ivkuznetsov](https://github.com/ivkuznetsov)
