@@ -49,7 +49,7 @@ extension Movie: Fetchable {
     }
     
     func fullPosterURL() async throws -> URL? {
-        if let poster = try await onMoc({ self.poster }) {
+        if let poster = try await async(\.poster) {
             let config = try await DataLayer.shared.network.configuration()
             return URL(string: "\(config.imagesBaseUrl)w185\(poster)")
         }
@@ -57,7 +57,7 @@ extension Movie: Fetchable {
     }
     
     func updateDetails() async throws {
-        let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await onMoc({ self.uid! }))")))
+        let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await async(\.uid!))")))
         try await DataLayer.shared.database.edit {
             let movie = $0.findAndUpdate(Movie.self, serviceObject: dict)
             movie?.isLoaded = true
