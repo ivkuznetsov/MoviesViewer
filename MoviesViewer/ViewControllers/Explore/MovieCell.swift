@@ -39,12 +39,13 @@ class MovieCell: BaseCollectionCell {
             title.text = movie.title
             poster.image = nil
             
-            let movie = self.movie!
-            movie.fullPosterURL().successOnMain { [weak self] url in
+            let movie = self.movie
+            Task { @MainActor [weak self] in
+                let url = try await movie?.fullPosterURL()
                 if self?.movie == movie {
                     self?.poster.sd_setImage(with: url)
                 }
-            }.run()
+            }
         }
     }
     

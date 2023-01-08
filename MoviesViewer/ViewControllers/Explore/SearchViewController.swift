@@ -35,7 +35,7 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
         (collection.list.emptyStateView as! NoObjectsView).header.text = "No Results"
         collection.list.view.keyboardDismissMode = .onDrag
         
-        collection.list.setCell(for: Movie.self,
+        collection.list.addCell(for: Movie.self,
                                 type: MovieCell.self,
                                 fill: { $1.movie = $0 },
                                 size: { [unowned self] _ in
@@ -48,13 +48,9 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
             lastSearchQuery.count > 2 && $0.isEmpty
         }
         
-        collection.loadPage = { [unowned self] offset, _, completion in
-            loadingPresenter.helper.run(collection.content == nil ? .opaque : .none, reuseKey: "feed") {
-                Movie.search(query: self.searchController.searchBar.text ?? "", offset: offset).convertOnMain { ids, next in
-                    PagedContent(ids.objects(), next: next)
-                }.completionOnMain(completion)
-            }
-        }
+        collection.paging.set(loadPage: { @MainActor [weak self] offset in
+            try await Movie.search(query: self?.searchController.searchBar.text ?? "", offset: offset).content
+        }, with: loadingPresenter.helper)
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -64,9 +60,9 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
         lastSearchQuery = query
         
         if query.count > 2 {
-            collection.refresh()
+            collection.paging.refresh()
         } else {
-            collection.content = nil
+            collection.paging.content = .empty
         }
     }
 }

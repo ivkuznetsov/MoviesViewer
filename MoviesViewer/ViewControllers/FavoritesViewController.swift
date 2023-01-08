@@ -27,7 +27,7 @@ class FavoritesViewController: BaseController {
         (collection.emptyStateView as! NoObjectsView).header.text = "No Favorites"
         (collection.emptyStateView as! NoObjectsView).details.text = "Push ⭑ button in movie details\nto make it favorite"
         
-        collection.setCell(for: Movie.self,
+        collection.addCell(for: Movie.self,
                            type: MovieCell.self,
                            fill: { $1.movie = $0 },
                            size: { [unowned self] _ in

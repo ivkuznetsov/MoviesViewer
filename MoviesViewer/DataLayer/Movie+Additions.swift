@@ -10,19 +10,6 @@ import Database
 import CommonUtils
 import Network
 
-struct Page: ResponsePage {
-    
-    var values: [[String : Any]]
-    var nextOffset: Any?
-    
-    init?(dict: [String : Any]) {
-        values = dict["results"] as? [[String : Any]] ?? []
-        let totalPages = dict["total_pages"] as? Int64 ?? 0
-        let currentPage = dict["page"] as? Int64 ?? 0
-        nextOffset = currentPage < totalPages - 1 ? (currentPage + 1) : nil
-    }
-}
-
 extension Movie: Fetchable {
     
     public func update(_ dict: [AnyHashable : Any]) {
@@ -41,42 +28,39 @@ extension Movie: Fetchable {
         }
     }
     
-    static func mostPopular(offset: Any? = nil) -> Work<(ids: [ObjectId<Movie>], next: Any?)> {
-        movies(endpoint: "4/discover/movie", parameters: ["sort_by" : "popularity.desc"], offset: offset)
+    static func mostPopular(offset: Any? = nil) async throws -> Page<Movie> {
+        try await movies(endpoint: "4/discover/movie", parameters: ["sort_by" : "popularity.desc"], offset: offset)
     }
     
-    static func search(query: String, offset: Any? = nil) -> Work<(ids: [ObjectId<Movie>], next: Any?)> {
-        movies(endpoint: "4/search/movie", parameters: ["query" : query], offset: offset)
+    static func search(query: String, offset: Any? = nil) async throws -> Page<Movie> {
+        try await movies(endpoint: "4/search/movie", parameters: ["query" : query], offset: offset)
     }
     
-    private static func movies(endpoint: String, parameters: [String : Any], offset: Any?) -> Work<(ids: [ObjectId<Movie>], next: Any?)> {
+    private static func movies(endpoint: String, parameters: [String : Any], offset: Any?) async throws -> Page<Movie> {
         var dict = parameters
         dict["page"] = offset
         
-        let request = PageRequest<Page>(.autorized(endpoint: endpoint, paramenters: dict))
-        return DataLayer.shared.network.load(request).chain { page in
-            DataLayer.shared.database.editOp { ctx in
-                (ctx.parse(Movie.self, array: page.values).ids, page.nextOffset)
-            }
-        }
+        let request = PageRequest<JSONPage>(.autorized(endpoint: endpoint, paramenters: dict))
+        let page = try await DataLayer.shared.network.load(request)
+        let items = try await DataLayer.shared.database.edit {
+            $0.parse(Movie.self, array: page.values).ids
+        }.objects()
+        return Page(items: items, next: page.nextOffset)
     }
     
-    func fullPosterURL() -> Work<URL?> {
-        if let poster = poster {
-            return DataLayer.shared.network.loadConfig().convert {
-                URL(string: "\($0.imagesBaseUrl)w185\(poster)")
-            }
-        } else {
-            return .value(nil)
+    func fullPosterURL() async throws -> URL? {
+        if let poster = try await onMoc({ self.poster }) {
+            let config = try await DataLayer.shared.network.configuration()
+            return URL(string: "\(config.imagesBaseUrl)w185\(poster)")
         }
+        return nil
     }
     
-    func updateDetails() -> VoidWork {
-        DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(uid!)"))).then { dict in
-            DataLayer.shared.database.editOp { ctx in
-                let movie = ctx.findAndUpdate(Movie.self, serviceObject: dict)
-                movie?.isLoaded = true
-            }
+    func updateDetails() async throws {
+        let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await onMoc({ self.uid! }))")))
+        try await DataLayer.shared.database.edit {
+            let movie = $0.findAndUpdate(Movie.self, serviceObject: dict)
+            movie?.isLoaded = true
         }
     }
     

@@ -35,7 +35,7 @@ class MovieDetailsViewController: BaseController {
         table.attachTo(view)
         table.view.tableHeaderView = UIView()
         table.view.separatorInset = .zero
-        table.setCell(for: Entry.self,
+        table.addCell(for: Entry.self,
                       type: DetailCell.self,
                       fill: { $1.entry = $0 })
         
@@ -46,8 +46,8 @@ class MovieDetailsViewController: BaseController {
         }
         reloadView(false)
         
-        loadingPresenter.helper.run(movie?.isLoaded == true ? .none : .opaque) { [weak self] in
-            self?.movie?.updateDetails()
+        loadingPresenter.helper.run(movie?.isLoaded == true ? .none : .opaque) { [weak self] _ in
+            try await self?.movie?.updateDetails()
         }
     }
     

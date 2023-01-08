@@ -17,10 +17,12 @@ class MovieHeaderView: UIView {
     var movie: Movie! {
         didSet {
             title.text = movie.title
-            movie.fullPosterURL().successOnMain { [weak self] url in
+            
+            Task { @MainActor [weak self] in
+                let url = try await movie.fullPosterURL()
                 self?.poster.sd_setImage(with: url)
                 self?.background.sd_setImage(with: url)
-            }.run()
+            }
         }
     }
 }

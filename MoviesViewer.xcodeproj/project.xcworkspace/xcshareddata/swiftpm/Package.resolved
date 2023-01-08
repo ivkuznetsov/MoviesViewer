@@ -6,7 +6,7 @@
       "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "c82cb7200e39fd4d2538c8a41e07f4a9bc4712c6"
+        "revision" : "428c894d3f96d1295f3f6b48485fea4e4116059a"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/ivkuznetsov/Database.git",
       "state" : {
         "branch" : "main",
-        "revision" : "65975585515332b70ffabd973819a10ba82b2256"
+        "revision" : "0ced1f6c29b3215b49f1db4cdcc0e8b41770b903"
       }
     },
     {
@@ -24,7 +24,7 @@
       "location" : "https://github.com/ivkuznetsov/Network.git",
       "state" : {
         "branch" : "main",
-        "revision" : "86eefbff2c41e7474aaae64aeb676b54c78db1ee"
+        "revision" : "df3a4ed656bfd5a208249965ec76ac4ccb5d5ff2"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/ivkuznetsov/SharedUIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "eae7e676d5db3c613bbc3166425c41e5e3b0a136"
+        "revision" : "d12f3ef7f1eb32fddab31b38e3fbf68765fbf09e"
       }
     },
     {
@@ -51,7 +51,7 @@
       "location" : "https://github.com/ivkuznetsov/UIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "8b6500219ece4d31edd5721b528b233f300ba307"
+        "revision" : "25153eb5daf650aa6ead5512b8d4618b98e385ad"
       }
     }
   ],

@@ -11,14 +11,14 @@ import CoreData
 
 extension ObjectId {
 
-    public func object() -> T? {
+    @MainActor public func object() -> T? {
         DataLayer.shared.database.viewContext.find(type: T.self, objectId: objectId)
     }
 }
 
 extension Sequence {
     
-    func objects<U: NSManagedObject>() -> [U] where Element == ObjectId<U> {
+    @MainActor func objects<U: NSManagedObject>() -> [U] where Element == ObjectId<U> {
         objects(DataLayer.shared.database.viewContext)
     }
 }

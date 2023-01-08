@@ -9,6 +9,18 @@ import UIKit
 import SharedUIComponents
 import UIComponents
 
+func runTest(_ progress: (Double)->()) async {
+    progress(0.1)
+    sleep(1)
+    progress(0.2)
+    sleep(1)
+    progress(0.3)
+    sleep(1)
+    progress(0.4)
+    sleep(1)
+    progress(1)
+}
+
 class ExploreViewController: BaseController {
     
     private let collection = PagingCollection()
@@ -18,6 +30,14 @@ class ExploreViewController: BaseController {
         super.init(coder: aDecoder)
         title = "Movies Viewer"
         navigationItem.backButtonTitle = "Back"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Check Progress", style: .plain, target: self, action: #selector(progressTest))
+    }
+    
+    @objc private func progressTest() {
+        loadingPresenter.helper.run(.translucent) { progress in
+            await runTest(progress)
+        }
     }
     
     override func viewDidLoad() {
@@ -27,7 +47,7 @@ class ExploreViewController: BaseController {
         collection.list.view.set(cellsPadding: 15)
         collection.list.view.keyboardDismissMode = .onDrag
         
-        collection.list.setCell(for: Movie.self,
+        collection.list.addCell(for: Movie.self,
                                 type: MovieCell.self,
                                 fill: { $1.movie = $0 },
                                 size: { [unowned self] _ in
@@ -36,7 +56,7 @@ class ExploreViewController: BaseController {
             navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
         })
         
-        collection.firstPageCache = (save: {
+        collection.paging.firstPageCache = (save: {
             let items = ($0 as? [Movie])?.compactMap { $0.objectID.uriRepresentation().absoluteString }
             UserDefaults.standard.set(items, forKey: "firstPage")
         }, load: {
@@ -44,15 +64,11 @@ class ExploreViewController: BaseController {
             return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
         })
         
-        collection.loadPage = { [unowned self] offset, _, completion in
-            loadingPresenter.helper.run(collection.content != nil ? .none : .opaque, reuseKey: "feed") {
-                Movie.mostPopular(offset: offset).convertOnMain { ids, next in
-                    PagedContent(ids.objects(), next: next)
-                }.completionOnMain(completion)
-            }
-        }
+        collection.paging.set(loadPage: {
+            try await Movie.mostPopular(offset: $0).content
+        }, with: loadingPresenter.helper)
         
         navigationItem.searchController = searchVC.searchController
-        collection.refresh()
+        collection.paging.refresh()
     }
 }
