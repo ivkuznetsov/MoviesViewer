@@ -35,10 +35,6 @@ class MovieDetailsViewController: BaseController {
         table.attachTo(view)
         table.view.tableHeaderView = UIView()
         table.view.separatorInset = .zero
-        table.addCell(for: Entry.self,
-                      type: DetailCell.self,
-                      fill: { $1.entry = $0 })
-        
         header.movie = movie
         
         _movie.didChange = { [weak self] replaced in
@@ -57,11 +53,11 @@ class MovieDetailsViewController: BaseController {
             return
         }
 
-        var objects: [AnyHashable] = [header]
+        var entries: [Entry] = []
         
         let addEntry: (String, String?)->() = {
             if let detail = $1, detail.isValid {
-                objects.append(Entry(title: $0, detail: detail))
+                entries.append(Entry(title: $0, detail: detail))
             }
         }
         addEntry("Genres", movie.genres?.joined(separator: ", "))
@@ -69,6 +65,12 @@ class MovieDetailsViewController: BaseController {
         addEntry("Countries", movie.countries?.joined(separator: "\n"))
         addEntry("Overview", movie.overview )
         
-        table.set(objects, animated: animated)
+        table.set(.with {
+            $0.addSection(header)
+            
+            $0.addSection(entries, cell: DetailCell.self) {
+                $1.entry = $0
+            }
+        }, animated: animated)
     }
 }

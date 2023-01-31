@@ -6,7 +6,7 @@
       "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "428c894d3f96d1295f3f6b48485fea4e4116059a"
+        "revision" : "7acc91a3837f73ff6b8d504d32418fab0b7dd92f"
       }
     },
     {
@@ -15,7 +15,7 @@
       "location" : "https://github.com/ivkuznetsov/Database.git",
       "state" : {
         "branch" : "main",
-        "revision" : "e379c5f1a64021b626e873f609f77fef53f6174c"
+        "revision" : "dda67efac7acc43f44dfc5f74f9ed9619fbc1a1c"
       }
     },
     {
@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage",
       "state" : {
-        "revision" : "3312bf5e67b52fbce7c3caf431b0cda721a9f7bb",
-        "version" : "5.14.2"
+        "revision" : "6c6b951845a520fa7e8356e28adb5339c0f008d3",
+        "version" : "5.15.0"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/ivkuznetsov/SharedUIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "d12f3ef7f1eb32fddab31b38e3fbf68765fbf09e"
+        "revision" : "8dddb921d11b9a973c0a4b9170935790fefb3abc"
       }
     },
     {
@@ -51,7 +51,7 @@
       "location" : "https://github.com/ivkuznetsov/UIComponents.git",
       "state" : {
         "branch" : "main",
-        "revision" : "25153eb5daf650aa6ead5512b8d4618b98e385ad"
+        "revision" : "31fbfde52bd20f0891745aaab45970ed4ba015cf"
       }
     }
   ],

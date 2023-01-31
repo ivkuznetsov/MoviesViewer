@@ -17,13 +17,6 @@ class FavoriteButton: UIBarButtonItem {
         super.init()
         target = self
         action = #selector(favoriteAction)
-        
-        let dict: [NSAttributedString.Key : Any] = [.font : UIFont.systemFont(ofSize: 26),
-                                                    .baselineOffset : -3]
-        
-        setTitleTextAttributes(dict, for: .normal)
-        setTitleTextAttributes(dict, for: .selected)
-        
         favorites.observe(self) { [weak self] _ in self?.reload() }
     }
     
@@ -47,6 +40,6 @@ class FavoriteButton: UIBarButtonItem {
     
     private func reload() {
         guard let movie = movie else { return }
-        title = favorites.has(movie) ? "★" : "☆"
+        image = UIImage(systemName: favorites.has(movie) ? "star.fill" : "star")
     }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import SharedUIComponents
 
 class PosterContainerView: UIView {
     
@@ -24,6 +25,22 @@ class PosterContainerView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.shadowPath = UIBezierPath(rect: layer.bounds).cgPath
+    }
+}
+
+extension Snapshot<CollectionView> {
+    
+    mutating func addSection(_ movies: [Movie], action: @escaping (Movie)->()) {
+        addSection(movies,
+                   cell: MovieCell.self,
+                   fill: { $1.movie = $0 },
+                   action: action, layout:  {
+            .grid(maxWidth: 180, height: {
+                var height = ($0 - 16) / 3 * 4
+                height += 53
+                return height
+            }, environment: $0)
+        })
     }
 }
 
@@ -47,21 +64,5 @@ class MovieCell: BaseCollectionCell {
                 }
             }
         }
-    }
-    
-    static func size(contentWidth: CGFloat, space: CGFloat) -> CGSize {
-        let width = contentWidth
-        
-        let count = floor(width / 150)
-        if count == 0 { return CGSize(width: width, height: height(for: width)) }
-        
-        let side = (width - (space * (count - 1))) / count
-        return CGSize(width: side, height: height(for: side))
-    }
-    
-    static func height(for width: CGFloat) -> CGFloat {
-        var height = (width - 16) / 3 * 4
-        height += 53
-        return height
     }
 }

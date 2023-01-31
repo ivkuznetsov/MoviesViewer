@@ -10,5 +10,5 @@ import SharedUIComponents
 
 extension Page {
     
-    var content: Paging.Content { .init(items as! [AnyHashable], next: next) }
+    var content: PagingContent { .init(items, next: next) }
 }

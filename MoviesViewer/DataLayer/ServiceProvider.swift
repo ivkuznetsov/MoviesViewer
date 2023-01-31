@@ -9,9 +9,9 @@ import Foundation
 import Network
 import CommonUtils
 
-struct Page<T> {
+struct Page<T: Hashable> {
     let items: [T]
-    let next: Any?
+    let next: AnyHashable?
 }
 
 struct JSONPage: ResponsePage {

@@ -12,7 +12,12 @@ import SharedUIComponents
 class SearchViewController: BaseController, UISearchResultsUpdating {
     
     private(set) var searchController: UISearchController!
-    private let collection = PagingCollection(hasRefreshControl: false)
+    
+    private let paging = Paging<Movie>()
+    private let collection = PagingCollection.make(refreshControl: false) {
+        $0.header.text = "No Results"
+    }
+    
     private var lastSearchQuery: String = ""
     
     override init() {
@@ -31,24 +36,23 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
         super.viewDidLoad()
         
         collection.list.attachTo(view)
-        collection.list.view.set(cellsPadding: 15)
-        (collection.list.emptyStateView as! NoObjectsView).header.text = "No Results"
         collection.list.view.keyboardDismissMode = .onDrag
-        
-        collection.list.addCell(for: Movie.self,
-                                type: MovieCell.self,
-                                fill: { $1.movie = $0 },
-                                size: { [unowned self] _ in
-            MovieCell.size(contentWidth: collection.list.view.defaultWidth, space: 15)
-        }, action: { [unowned self] in
-            presentingViewController?.navigationController?.pushViewController(MovieDetailsViewController(movie: $0), animated: true)
-        })
-        
         collection.list.showNoData = { [unowned self] in
-            lastSearchQuery.count > 2 && $0.isEmpty
+            lastSearchQuery.count > 2 && $0.numberOfItems == 0
         }
         
-        collection.paging.set(loadPage: { @MainActor [weak self] offset in
+        collection.set(paging: paging) { [weak self] items in
+                .with {
+                    $0.addSection(items) {
+                        self?.presentingViewController?
+                            .navigationController?
+                            .pushViewController(MovieDetailsViewController(movie: $0), animated: true)
+                    }
+                    $0.addLoading()
+                }
+        }
+        
+        paging.set(loadPage: { [weak self] offset in
             try await Movie.search(query: self?.searchController.searchBar.text ?? "", offset: offset).content
         }, with: loadingPresenter.helper)
     }
@@ -60,9 +64,9 @@ class SearchViewController: BaseController, UISearchResultsUpdating {
         lastSearchQuery = query
         
         if query.count > 2 {
-            collection.paging.refresh()
+            paging.refresh()
         } else {
-            collection.paging.content = .empty
+            paging.content = .empty
         }
     }
 }

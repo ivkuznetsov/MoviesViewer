@@ -28,15 +28,15 @@ extension Movie: Fetchable {
         }
     }
     
-    static func mostPopular(offset: Any? = nil) async throws -> Page<Movie> {
+    static func mostPopular(offset: AnyHashable? = nil) async throws -> Page<Movie> {
         try await movies(endpoint: "4/discover/movie", parameters: ["sort_by" : "popularity.desc"], offset: offset)
     }
     
-    static func search(query: String, offset: Any? = nil) async throws -> Page<Movie> {
+    static func search(query: String, offset: AnyHashable? = nil) async throws -> Page<Movie> {
         try await movies(endpoint: "4/search/movie", parameters: ["query" : query], offset: offset)
     }
     
-    private static func movies(endpoint: String, parameters: [String : Any], offset: Any?) async throws -> Page<Movie> {
+    private static func movies(endpoint: String, parameters: [String : Any], offset: AnyHashable?) async throws -> Page<Movie> {
         var dict = parameters
         dict["page"] = offset
         
@@ -45,11 +45,11 @@ extension Movie: Fetchable {
         let items = try await DataLayer.shared.database.edit {
             $0.parse(Movie.self, array: page.values).ids
         }.objects()
-        return Page(items: items, next: page.nextOffset)
+        return Page(items: items, next: page.nextOffset as? AnyHashable)
     }
     
     func fullPosterURL() async throws -> URL? {
-        if let poster = try await async(\.poster) {
+        if let poster = try await async.poster() {
             let config = try await DataLayer.shared.network.configuration()
             return URL(string: "\(config.imagesBaseUrl)w185\(poster)")
         }
@@ -57,7 +57,7 @@ extension Movie: Fetchable {
     }
     
     func updateDetails() async throws {
-        let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await async(\.uid!))")))
+        let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await async.uid()!)")))
         try await DataLayer.shared.database.edit {
             let movie = $0.findAndUpdate(Movie.self, serviceObject: dict)
             movie?.isLoaded = true
