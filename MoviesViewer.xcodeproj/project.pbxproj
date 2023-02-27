@@ -47,7 +47,6 @@
 		D71640DC292955270059B519 /* MovieCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MovieCell.xib; sourceTree = "<group>"; };
 		D71640DF2929684D0059B519 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		D71640E9292A31270059B519 /* ServiceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceProvider.swift; sourceTree = "<group>"; };
-		D768F21F29AD026E006536F3 /* Database */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Database; path = ../Database; sourceTree = "<group>"; };
 		D7BB28542929360400C74BAE /* MoviesViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7BB28572929360400C74BAE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7BB28602929360400C74BAE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -123,18 +122,9 @@
 			path = Explore;
 			sourceTree = "<group>";
 		};
-		D768F21E29AD026E006536F3 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				D768F21F29AD026E006536F3 /* Database */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		D7BB284B2929360400C74BAE = {
 			isa = PBXGroup;
 			children = (
-				D768F21E29AD026E006536F3 /* Packages */,
 				D7BB28562929360400C74BAE /* MoviesViewer */,
 				D7BB28552929360400C74BAE /* Products */,
 			);

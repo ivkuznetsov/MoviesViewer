@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "database",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ivkuznetsov/Database.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "d49a8eb02dc894821c32b8f8df5566179781779a"
+      }
+    },
+    {
       "identity" : "network",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ivkuznetsov/Network.git",
