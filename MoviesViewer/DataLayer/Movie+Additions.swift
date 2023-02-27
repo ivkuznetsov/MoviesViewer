@@ -28,12 +28,19 @@ extension Movie: Fetchable {
         }
     }
     
+    @MainActor static func with(uri: URL) -> Movie? {
+        if let objectId = DataLayer.shared.database.idFor(uriRepresentation: uri) {
+            return Movie.find(objectId: objectId)
+        }
+        return nil
+    }
+    
     static func mostPopular(offset: AnyHashable? = nil) async throws -> Page<Movie> {
         try await movies(endpoint: "4/discover/movie", parameters: ["sort_by" : "popularity.desc"], offset: offset)
     }
     
     static func search(query: String, offset: AnyHashable? = nil) async throws -> Page<Movie> {
-        try await movies(endpoint: "4/search/movie", parameters: ["query" : query], offset: offset)
+        try await movies(endpoint: "3/search/movie", parameters: ["query" : query], offset: offset)
     }
     
     private static func movies(endpoint: String, parameters: [String : Any], offset: AnyHashable?) async throws -> Page<Movie> {
@@ -43,7 +50,7 @@ extension Movie: Fetchable {
         let request = PageRequest<JSONPage>(.autorized(endpoint: endpoint, paramenters: dict))
         let page = try await DataLayer.shared.network.load(request)
         let items = try await DataLayer.shared.database.edit {
-            $0.parse(Movie.self, array: page.values).ids
+            Movie.parse(page.values, ctx: $0).ids
         }.objects()
         return Page(items: items, next: page.nextOffset as? AnyHashable)
     }
@@ -59,8 +66,7 @@ extension Movie: Fetchable {
     func updateDetails() async throws {
         let dict = try await DataLayer.shared.network.load(SerializableRequest<[String:Any]>(.autorized(endpoint: "3/movie/\(try await async.uid()!)")))
         try await DataLayer.shared.database.edit {
-            let movie = $0.findAndUpdate(Movie.self, serviceObject: dict)
-            movie?.isLoaded = true
+            Movie.findAndUpdate(serviceObject: dict, ctx: $0)?.isLoaded = true
         }
     }
     

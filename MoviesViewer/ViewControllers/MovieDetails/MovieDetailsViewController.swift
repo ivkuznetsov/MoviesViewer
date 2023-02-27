@@ -14,7 +14,7 @@ import UIKit
 class MovieDetailsViewController: BaseController {
     
     private let table = Table()
-    @DBObservable private var movie: Movie?
+    private let movie: Movie
     private let header = MovieHeaderView.loadFromNib()
     
     init(movie: Movie) {
@@ -37,22 +37,20 @@ class MovieDetailsViewController: BaseController {
         table.view.separatorInset = .zero
         header.movie = movie
         
-        _movie.didChange = { [weak self] replaced in
-            self?.reloadView(false)
-        }
+        movie.objectWillChange.sink(receiveValue: { [weak self] in
+            DispatchQueue.main.async {
+                self?.reloadView(false)
+            }
+        }).retained(by: self)
+        
         reloadView(false)
         
-        loadingPresenter.helper.run(movie?.isLoaded == true ? .none : .opaque) { [weak self] _ in
-            try await self?.movie?.updateDetails()
+        loadingPresenter.helper.run(movie.isLoaded == true ? .none : .opaque) { [weak self] _ in
+            try await self?.movie.updateDetails()
         }
     }
     
     override func reloadView(_ animated: Bool) {
-        guard let movie = movie else {
-            navigationController?.popViewController(animated: true)
-            return
-        }
-
         var entries: [Entry] = []
         
         let addEntry: (String, String?)->() = {

@@ -6,16 +6,7 @@
       "location" : "https://github.com/ivkuznetsov/CommonUtils.git",
       "state" : {
         "branch" : "main",
-        "revision" : "7acc91a3837f73ff6b8d504d32418fab0b7dd92f"
-      }
-    },
-    {
-      "identity" : "database",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ivkuznetsov/Database.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "dda67efac7acc43f44dfc5f74f9ed9619fbc1a1c"
+        "revision" : "2fb2d818131e5669f4eb017da3c24d93f996fc96"
       }
     },
     {
@@ -32,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SDWebImage/SDWebImage",
       "state" : {
-        "revision" : "6c6b951845a520fa7e8356e28adb5339c0f008d3",
-        "version" : "5.15.0"
+        "revision" : "a812079ae91a7f2e627364c42ea7b98abfa366ed",
+        "version" : "5.15.4"
       }
     },
     {

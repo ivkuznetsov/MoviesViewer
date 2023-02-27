@@ -10,38 +10,43 @@ import CommonUtils
 import Database
 import CoreData
 
-class ObjectsContainer<T: NSManagedObject>: Observable {
+@MainActor
+class ObjectsContainer<T: NSManagedObject>: ObservableObject {
     
     private let key: String
     private let database: Database
     
-    @RWAtomic private var ids: [ObjectId<T>] = []
+    @Published private var ids: [ObjectId<T>] = []
     
-    init(key: String, database: Database) {
+    nonisolated init(key: String, database: Database) {
         self.key = key
         self.database = database
         
+        Task { @MainActor in setup() }
+    }
+    
+    private func setup() {
         if let array = UserDefaults.standard.array(forKey: key) as? [String] {
             ids = array.compactMap({
                 if let objectId = database.idFor(uriRepresentation: URL(string: $0)!),
-                   let object = database.viewContext.find(type: T.self, objectId: objectId) {
+                   let object = T.find(objectId: objectId) {
                     return ObjectId(object)
                 }
                 return nil
             })
         }
+        
+        $ids.sink { [unowned self] in
+            UserDefaults.standard.set($0.map { $0.objectId.uriRepresentation().absoluteString }, forKey: key)
+        }.retained(by: self)
     }
     
     func add(_ object: T) {
-        _ids.mutate {
-            let objectId = object.getObjectId
+        let objectId = object.getObjectId
             
-            if !$0.contains(objectId) {
-                $0.append(objectId)
-            }
-            UserDefaults.standard.set($0.map { $0.objectId.uriRepresentation().absoluteString }, forKey: key)
+        if !ids.contains(objectId) {
+            ids.append(objectId)
         }
-        post(nil)
     }
     
     func has(_ object: T) -> Bool {
@@ -49,12 +54,9 @@ class ObjectsContainer<T: NSManagedObject>: Observable {
     }
     
     func remove(_ object: T) {
-        _ids.mutate {
-            if let index = $0.firstIndex(of: object.getObjectId) {
-                $0.remove(at: index)
-            }
+        if let index = ids.firstIndex(of: object.getObjectId) {
+            ids.remove(at: index)
         }
-        post(nil)
     }
     
     func objects(ctx: NSManagedObjectContext) -> [T] {

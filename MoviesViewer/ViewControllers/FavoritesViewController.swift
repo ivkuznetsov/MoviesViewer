@@ -26,9 +26,9 @@ class FavoritesViewController: BaseController {
         super.viewDidLoad()
         
         collection.attachTo(view)
-        favorites.observe(self) { [weak self] _ in
+        favorites.objectWillChange.sink { [weak self] in
             self?.reloadView(true)
-        }
+        }.retained(by: self)
         reloadView(false)
     }
     

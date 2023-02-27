@@ -18,6 +18,7 @@ class DataLayer {
     let favorites: ObjectsContainer<Movie>
     
     init() {
+        Database.setup(global: database)
         favorites = ObjectsContainer(key: "favorites", database: database)
     }
 }

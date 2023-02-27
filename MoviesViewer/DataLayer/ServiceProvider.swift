@@ -56,7 +56,7 @@ class ServiceProvider: NetworkProvider {
             if let success = body?["success"] as? Bool, success == false {
                 throw RunError.custom(body?["status_message"] as? String ?? "Request Failed")
             }
-        })
+        }, logging: false)
     }
     
     private var currentConfiguraiton: Configuration?

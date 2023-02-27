@@ -33,7 +33,7 @@ class ExploreViewController: BaseController {
             UserDefaults.standard.set(items, forKey: "firstPage")
         }, load: {
             let ids = UserDefaults.standard.array(forKey: "firstPage") ?? []
-            return ids.compactMap { Movie.object(uri: URL(string: $0 as! String)!) }
+            return ids.compactMap { Movie.with(uri: URL(string: $0 as! String)!) }
         })
         
         collection.set(paging: paging) { [weak self] items in

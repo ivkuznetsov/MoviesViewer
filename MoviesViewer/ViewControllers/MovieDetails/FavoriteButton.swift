@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import UIComponents
+import CommonUtils
 
 class FavoriteButton: UIBarButtonItem {
     
@@ -17,7 +18,11 @@ class FavoriteButton: UIBarButtonItem {
         super.init()
         target = self
         action = #selector(favoriteAction)
-        favorites.observe(self) { [weak self] _ in self?.reload() }
+        favorites.objectWillChange.sink { [weak self] in
+            DispatchQueue.main.async {
+                self?.reload()
+            }
+        }.retained(by: self)
     }
     
     @objc private func favoriteAction() {
